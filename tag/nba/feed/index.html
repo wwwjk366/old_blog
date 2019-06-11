@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>NBA &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/tag/nba/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>NBA &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Scrape Valuable NBA Data and Preserve in MongoDB</title>
+		<link>https://wwwjk366.github.io/scrape-valuable-nba-data-and-preserve-in-mongodb/</link>
+				<comments>https://wwwjk366.github.io/scrape-valuable-nba-data-and-preserve-in-mongodb/#respond</comments>
+				<pubDate>Tue, 09 Oct 2018 02:57:25 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[MongoDB]]></category>
+		<category><![CDATA[NBA]]></category>
+		<category><![CDATA[R stuff]]></category>
+		<category><![CDATA[R]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=254</guid>
+				<description><![CDATA[Introduction New NBA season is coming up (in 2 weeks) and our office is busy organizing fantasy leagues. In order to do well on my first try of fantasy sports, I said to myself:“Why don&#8217;t I build a machine learning model to predict the player performances based on our fantasy leagues specific rules?”. It shouldn&#8217;t...]]></description>
+								<content:encoded><![CDATA[<h2>Introduction</h2>
+<p>New NBA season is coming up (in 2 weeks) and our office is busy organizing fantasy leagues. In order to do well on my first try of fantasy sports, I said to myself:“Why don&#8217;t I build a machine learning model to predict the player performances based on our fantasy leagues specific rules?”. It shouldn&#8217;t be that hard to come up with a simple model to help me draft players. So here comes to the very first question to every machine learning problem — Data.</p>
+<p>Fortunately, I came across this <a href="https://www.reddit.com/r/nba/comments/3k91g5/finally_some_documentation_for_the_statsnbacom_api/">reddit post</a>. I am really surprised that NBA.com has those API endpoints open to public! Moreover, there are already tools made for those endpoints in both R and Python! It is amazing that you can get almost any data you want from those endpoints(team stats, player stats, play-by-play, etc). Since I am a hardcore R person, I will do this in R.</p>
+<h2>Install R package</h2>
+<p>I did my research on this wonderful R package <a href="https://github.com/ccagrawal/nbaTools">nbaTools</a>. It&#8217;s has not been taking care of recently but its working mostly fine, except when scrape heavily the NBA.com will block you because of cookies. So I make a small change in the scrape function. The working version in on my github with version number <strong>0.1.1</strong></p><pre class="crayon-plain-tag">install.packages("devtools")    # If you don't have devtools already installed
+devtools::install_github("wwwjk366/nbaTools")
+library(nbaTools)</pre><p>The part I changed are in the <code>scrape.R</code> file:</p><pre class="crayon-plain-tag">if (source %in% c('NBA', 'NBA.Synergy')) {
+    headers['Referer'] &lt;- gsub('%referer%', referer, headers['Referer'])
+    h1 &lt;- handle('')
+    request &lt;- GET(
+      url = gsub('%endpoint%', endpoint, kBaseURL[[source]]),
+      query = params,
+      do.call(add_headers, headers),
+      handle = h1,
+      timeout(10)
+      # httr::verbose()
+    )
+    return(content(request, 'parsed'))</pre><p>So by setting the handle manually <code>h1 &lt;- handle('')</code> then calling the <code>GET</code> using <code>handle = h1</code> parameter. Let&#8217;s verify this works:</p><pre class="crayon-plain-tag">library(tidyverse, quietly = TRUE)
+library(nbaTools)
+GetGames(Date = '2017-02-02')</pre><p></p><pre class="crayon-plain-tag">##         GAME_DATE_EST GAME_SEQUENCE    GAME_ID GAME_STATUS_ID
+## 1 2017-02-02T00:00:00             1 0021600742              3
+## 2 2017-02-02T00:00:00             2 0021600743              3
+## 3 2017-02-02T00:00:00             3 0021600744              3
+## 4 2017-02-02T00:00:00             4 0021600745              3
+##   GAME_STATUS_TEXT        GAMECODE HOME_TEAM_ID VISITOR_TEAM_ID SEASON
+## 1            Final 20170202/LALWAS   1610612764      1610612747   2016
+## 2            Final 20170202/ATLHOU   1610612745      1610612737   2016
+## 3            Final 20170202/PHISAS   1610612759      1610612755   2016
+## 4            Final 20170202/GSWLAC   1610612746      1610612744   2016
+##   LIVE_PERIOD LIVE_PC_TIME NATL_TV_BROADCASTER_ABBREVIATION
+## 1           4           NA                             &lt;NA&gt;
+## 2           4           NA                              TNT
+## 3           4           NA                             &lt;NA&gt;
+## 4           4           NA                              TNT
+##   HOME_TV_BROADCASTER_ABBREVIATION AWAY_TV_BROADCASTER_ABBREVIATION
+## 1                           NBCSWA                         SpecSN/D
+## 2                             &lt;NA&gt;                             &lt;NA&gt;
+## 3                          FSSW-SA                           NBCSP+
+## 4                             &lt;NA&gt;                             &lt;NA&gt;
+##   LIVE_PERIOD_TIME_BCAST        ARENA_NAME WH_STATUS
+## 1            Q4       -  Capital One Arena         1
+## 2         Q4       - TNT     Toyota Center         1
+## 3            Q4       -        AT&amp;T Center         1
+## 4         Q4       - TNT    Staples Center         1</pre><p>Great! This pulled from <code>http://stats.nba.com/stat/scoreboardv2</code>. We can easily grab a very detailed data from NBA.com.</p>
+<p>They have a lot of endpoints available, for example:</p>
+<p>Box score for a game:</p><pre class="crayon-plain-tag">GetBoxScore(GameID = '0021600794') %&gt;% glimpse()</pre><p></p><pre class="crayon-plain-tag">## Observations: 18
+## Variables: 28
+## $ GAME_ID           &lt;chr&gt; "0021600794", "0021600794", "0021600794", "0...
+## $ TEAM_ID           &lt;chr&gt; "1610612745", "1610612745", "1610612745", "1...
+## $ TEAM_ABBREVIATION &lt;chr&gt; "HOU", "HOU", "HOU", "HOU", "HOU", "HOU", "H...
+## $ TEAM_CITY         &lt;chr&gt; "Houston", "Houston", "Houston", "Houston", ...
+## $ PLAYER_ID         &lt;chr&gt; "2772", "201583", "203991", "201976", "20193...
+## $ PLAYER_NAME       &lt;chr&gt; "Trevor Ariza", "Ryan Anderson", "Clint Cape...
+## $ START_POSITION    &lt;chr&gt; "F", "F", "C", "G", "G", "", "", "", "F", "F...
+## $ COMMENT           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+## $ MIN               &lt;chr&gt; "41:32", "34:58", "26:00", "31:53", "39:27",...
+## $ FGM               &lt;int&gt; 4, 5, 5, 7, 8, 1, 7, 2, 4, 3, 4, 5, 6, 3, 2,...
+## $ FGA               &lt;int&gt; 11, 11, 8, 15, 21, 4, 10, 7, 9, 8, 8, 10, 14...
+## $ FG_PCT            &lt;dbl&gt; 0.364, 0.455, 0.625, 0.467, 0.381, 0.250, 0....
+## $ FG3M              &lt;int&gt; 3, 2, 0, 3, 4, 1, 0, 0, 0, 1, 0, 2, 2, 1, 2,...
+## $ FG3A              &lt;int&gt; 10, 6, 0, 8, 9, 4, 0, 3, 0, 4, 0, 4, 6, 3, 3...
+## $ FG3_PCT           &lt;dbl&gt; 0.300, 0.333, 0.000, 0.375, 0.444, 0.250, 0....
+## $ FTM               &lt;int&gt; 0, 2, 1, 0, 10, 2, 1, 0, 0, 5, 1, 3, 0, 1, 0...
+## $ FTA               &lt;int&gt; 0, 2, 3, 0, 12, 2, 1, 0, 0, 6, 1, 3, 0, 1, 0...
+## $ FT_PCT            &lt;dbl&gt; 0.000, 1.000, 0.333, 0.000, 0.833, 1.000, 1....
+## $ OREB              &lt;int&gt; 0, 1, 4, 0, 1, 0, 2, 1, 4, 1, 2, 1, 0, 0, 0,...
+## $ DREB              &lt;int&gt; 7, 3, 4, 2, 10, 4, 2, 1, 5, 6, 2, 7, 5, 3, 0...
+## $ REB               &lt;int&gt; 7, 4, 8, 2, 11, 4, 4, 2, 9, 7, 4, 8, 5, 3, 0...
+## $ AST               &lt;int&gt; 3, 1, 2, 3, 8, 2, 1, 2, 4, 0, 1, 10, 5, 1, 2...
+## $ STL               &lt;int&gt; 2, 0, 3, 3, 1, 3, 1, 0, 1, 2, 2, 1, 1, 0, 0,...
+## $ BLK               &lt;int&gt; 2, 0, 1, 0, 1, 0, 0, 1, 2, 0, 0, 0, 2, 0, 0,...
+## $ TO                &lt;int&gt; 0, 1, 3, 2, 9, 0, 2, 0, 0, 1, 3, 3, 6, 3, 1,...
+## $ PF                &lt;int&gt; 2, 2, 4, 0, 4, 4, 3, 0, 1, 2, 3, 3, 3, 1, 0,...
+## $ PTS               &lt;int&gt; 11, 14, 11, 17, 30, 5, 15, 4, 8, 12, 9, 15, ...
+## $ PLUS_MINUS        &lt;int&gt; 9, 7, 0, 11, 13, 0, 12, 8, -9, -10, -2, -6, ...</pre><p>Play-by-Play:</p><pre class="crayon-plain-tag">GetPlayByPlay(GameID = '0021600794') %&gt;% glimpse()</pre><p></p><pre class="crayon-plain-tag">## Observations: 445
+## Variables: 33
+## $ GAME_ID                   &lt;chr&gt; "0021600794", "0021600794", "0021600...
+## $ EVENTNUM                  &lt;int&gt; 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11...
+## $ EVENTMSGTYPE              &lt;int&gt; 12, 10, 1, 2, 4, 2, 4, 2, 4, 5, 5, 2...
+## $ EVENTMSGACTIONTYPE        &lt;int&gt; 0, 0, 1, 1, 0, 5, 0, 5, 0, 1, 1, 1, ...
+## $ PERIOD                    &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
+## $ WCTIMESTRING              &lt;chr&gt; "7:11 PM", "7:11 PM", "7:11 PM", "7:...
+## $ PCTIMESTRING              &lt;chr&gt; "12:00", "12:00", "11:41", "11:26", ...
+## $ HOMEDESCRIPTION           &lt;chr&gt; NA, "Jump Ball Zeller vs. Capela: Ti...
+## $ NEUTRALDESCRIPTION        &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+## $ VISITORDESCRIPTION        &lt;chr&gt; NA, NA, NA, "MISS Anderson 28' 3PT J...
+## $ SCORE                     &lt;chr&gt; NA, NA, "0 - 2", NA, NA, NA, NA, NA,...
+## $ SCOREMARGIN               &lt;chr&gt; NA, NA, "2", NA, NA, NA, NA, NA, NA,...
+## $ PERSON1TYPE               &lt;int&gt; 0, 4, 4, 5, 5, 5, 4, 4, 5, 5, 4, 5, ...
+## $ PLAYER1_ID                &lt;chr&gt; "0", "203469", "101107", "201583", "...
+## $ PLAYER1_NAME              &lt;chr&gt; NA, "Cody Zeller", "Marvin Williams"...
+## $ PLAYER1_TEAM_ID           &lt;chr&gt; NA, "1610612766", "1610612766", "161...
+## $ PLAYER1_TEAM_CITY         &lt;chr&gt; NA, "Charlotte", "Charlotte", "Houst...
+## $ PLAYER1_TEAM_NICKNAME     &lt;chr&gt; NA, "Hornets", "Hornets", "Rockets",...
+## $ PLAYER1_TEAM_ABBREVIATION &lt;chr&gt; NA, "CHA", "CHA", "HOU", "HOU", "HOU...
+## $ PERSON2TYPE               &lt;int&gt; 0, 5, 4, 0, 0, 0, 0, 0, 0, 4, 5, 0, ...
+## $ PLAYER2_ID                &lt;chr&gt; "0", "203991", "202689", "0", "0", "...
+## $ PLAYER2_NAME              &lt;chr&gt; NA, "Clint Capela", "Kemba Walker", ...
+## $ PLAYER2_TEAM_ID           &lt;chr&gt; NA, "1610612745", "1610612766", NA, ...
+## $ PLAYER2_TEAM_CITY         &lt;chr&gt; NA, "Houston", "Charlotte", NA, NA, ...
+## $ PLAYER2_TEAM_NICKNAME     &lt;chr&gt; NA, "Rockets", "Hornets", NA, NA, NA...
+## $ PLAYER2_TEAM_ABBREVIATION &lt;chr&gt; NA, "HOU", "CHA", NA, NA, NA, NA, NA...
+## $ PERSON3TYPE               &lt;int&gt; 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, ...
+## $ PLAYER3_ID                &lt;chr&gt; "0", "101107", "0", "0", "0", "20307...
+## $ PLAYER3_NAME              &lt;chr&gt; NA, "Marvin Williams", NA, NA, NA, "...
+## $ PLAYER3_TEAM_ID           &lt;chr&gt; NA, "1610612766", NA, NA, NA, "16106...
+## $ PLAYER3_TEAM_CITY         &lt;chr&gt; NA, "Charlotte", NA, NA, NA, "Charlo...
+## $ PLAYER3_TEAM_NICKNAME     &lt;chr&gt; NA, "Hornets", NA, NA, NA, "Hornets"...
+## $ PLAYER3_TEAM_ABBREVIATION &lt;chr&gt; NA, "CHA", NA, NA, NA, "CHA", NA, NA...</pre><p>Player Bios in playoffs:</p><pre class="crayon-plain-tag">GetPlayerBioStats(SeasonType = 'Playoffs', Season = '2017-18') %&gt;% glimpse()</pre><p></p><pre class="crayon-plain-tag">## Observations: 210
+## Variables: 23
+## $ PLAYER_ID            &lt;chr&gt; "201166", "1628935", "1627846", "201143",...
+## $ PLAYER_NAME          &lt;chr&gt; "Aaron Brooks", "Aaron Jackson", "Abdel N...
+## $ TEAM_ID              &lt;chr&gt; "1610612750", "1610612745", "1610612738",...
+## $ TEAM_ABBREVIATION    &lt;chr&gt; "MIN", "HOU", "BOS", "BOS", "POR", "UTA",...
+## $ AGE                  &lt;int&gt; 33, 32, 24, 32, 27, 26, 24, 31, 34, 23, 2...
+## $ PLAYER_HEIGHT        &lt;chr&gt; "6-0", "6-3", "6-6", "6-10", "6-9", "6-6"...
+## $ PLAYER_HEIGHT_INCHES &lt;int&gt; 72, 75, 78, 82, 81, 78, 78, 81, 78, 80, 8...
+## $ PLAYER_WEIGHT        &lt;int&gt; 161, 183, 230, 245, 220, 214, 190, 240, 2...
+## $ COLLEGE              &lt;chr&gt; "Oregon", "None", "Iowa State", "Florida"...
+## $ COUNTRY              &lt;chr&gt; "USA", "USA", "Egypt", "Dominican Republi...
+## $ DRAFT_YEAR           &lt;chr&gt; "2007", "Undrafted", "2016", "2007", "201...
+## $ DRAFT_ROUND          &lt;chr&gt; "1", "Undrafted", "2", "1", "1", "1", "2"...
+## $ DRAFT_NUMBER         &lt;chr&gt; "26", "Undrafted", "58", "3", "8", "12", ...
+## $ GP                   &lt;int&gt; 2, 7, 11, 19, 4, 9, 6, 8, 15, 5, 8, 9, 19...
+## $ PTS                  &lt;dbl&gt; 2.0, 0.7, 1.1, 15.7, 17.3, 9.1, 4.0, 3.3,...
+## $ REB                  &lt;dbl&gt; 0.0, 0.6, 0.3, 8.3, 9.0, 2.7, 2.7, 2.9, 4...
+## $ AST                  &lt;dbl&gt; 0.0, 0.3, 0.3, 3.3, 1.3, 1.9, 0.3, 1.1, 2...
+## $ NET_RATING           &lt;dbl&gt; 9.5, -21.7, -16.0, 5.6, -15.9, 4.4, 12.8,...
+## $ OREB_PCT             &lt;dbl&gt; 0.000, 0.111, 0.028, 0.047, 0.081, 0.016,...
+## $ DREB_PCT             &lt;dbl&gt; 0.000, 0.105, 0.059, 0.193, 0.212, 0.175,...
+## $ USG_PCT              &lt;dbl&gt; 0.500, 0.167, 0.232, 0.181, 0.184, 0.274,...
+## $ TS_PCT               &lt;dbl&gt; 0.515, 0.512, 0.358, 0.631, 0.652, 0.581,...
+## $ AST_PCT              &lt;dbl&gt; 0.000, 0.200, 0.188, 0.155, 0.062, 0.236,...</pre><p>Player Real Plus-Minus(RPM)<a href="https://deadspin.com/just-what-the-hell-is-real-plus-minus-espns-new-nba-s-1560361469">link</a></p>
+<p>Or even some more interesting one like team shot dashboard:</p><pre class="crayon-plain-tag">GetTeamShotDashboard(split = 'shot clock', TeamID = 1610612745, Season = '2017-18') %&gt;% glimpse()</pre><p></p><pre class="crayon-plain-tag">## Observations: 6
+## Variables: 18
+## $ TEAM_ID          &lt;chr&gt; "1610612745", "1610612745", "1610612745", "16...
+## $ TEAM_NAME        &lt;chr&gt; "Houston Rockets", "Houston Rockets", "Housto...
+## $ SORT_ORDER       &lt;int&gt; 1, 2, 3, 4, 5, 6
+## $ G                &lt;int&gt; 81, 81, 81, 81, 81, 81
+## $ SHOT_CLOCK_RANGE &lt;chr&gt; "24-22", "22-18 Very Early", "18-15 Early", "...
+## $ FGA_FREQUENCY    &lt;dbl&gt; 0.041, 0.163, 0.190, 0.421, 0.086, 0.099
+## $ FGM              &lt;dbl&gt; 1.73, 6.96, 7.49, 16.20, 3.38, 2.96
+## $ FGA              &lt;dbl&gt; 3.23, 12.96, 15.15, 33.54, 6.86, 7.93
+## $ FG_PCT           &lt;dbl&gt; 0.534, 0.537, 0.495, 0.483, 0.493, 0.374
+## $ EFG_PCT          &lt;dbl&gt; 0.573, 0.659, 0.600, 0.573, 0.594, 0.456
+## $ FG2A_FREQUENCY   &lt;dbl&gt; 0.031, 0.065, 0.088, 0.207, 0.042, 0.042
+## $ FG2M             &lt;dbl&gt; 1.48, 3.80, 4.30, 10.14, 2.00, 1.65
+## $ FG2A             &lt;dbl&gt; 2.43, 5.17, 6.98, 16.52, 3.37, 3.31
+## $ FG2_PCT          &lt;dbl&gt; 0.609, 0.735, 0.616, 0.614, 0.593, 0.500
+## $ FG3A_FREQUENCY   &lt;dbl&gt; 0.010, 0.098, 0.103, 0.214, 0.044, 0.058
+## $ FG3M             &lt;dbl&gt; 0.25, 3.16, 3.20, 6.06, 1.38, 1.31
+## $ FG3A             &lt;dbl&gt; 0.80, 7.79, 8.17, 17.02, 3.49, 4.62
+## $ FG3_PCT          &lt;dbl&gt; 0.308, 0.406, 0.391, 0.356, 0.396, 0.283</pre><p>Or even split it differently by dribble:</p><pre class="crayon-plain-tag">GetTeamShotDashboard(split = 'dribble', TeamID = '1610612756', Season = '2017-18') %&gt;% glimpse()</pre><p></p><pre class="crayon-plain-tag">## Observations: 5
+## Variables: 18
+## $ TEAM_ID        &lt;chr&gt; "1610612756", "1610612756", "1610612756", "1610...
+## $ TEAM_NAME      &lt;chr&gt; "Phoenix Suns", "Phoenix Suns", "Phoenix Suns",...
+## $ SORT_ORDER     &lt;int&gt; 1, 2, 3, 4, 5
+## $ G              &lt;int&gt; 82, 82, 82, 82, 82
+## $ DRIBBLE_RANGE  &lt;chr&gt; "0 Dribbles", "1 Dribble", "2 Dribbles", "3-6 D...
+## $ FGA_FREQUENCY  &lt;dbl&gt; 0.458, 0.134, 0.105, 0.195, 0.108
+## $ FGM            &lt;dbl&gt; 17.93, 5.37, 3.94, 7.41, 3.79
+## $ FGA            &lt;dbl&gt; 37.15, 10.88, 8.50, 15.79, 8.79
+## $ FG_PCT         &lt;dbl&gt; 0.483, 0.493, 0.463, 0.469, 0.431
+## $ EFG_PCT        &lt;dbl&gt; 0.576, 0.525, 0.486, 0.494, 0.458
+## $ FG2A_FREQUENCY &lt;dbl&gt; 0.211, 0.107, 0.089, 0.164, 0.089
+## $ FG2M           &lt;dbl&gt; 10.95, 4.67, 3.55, 6.65, 3.32
+## $ FG2A           &lt;dbl&gt; 17.09, 8.71, 7.23, 13.29, 7.20
+## $ FG2_PCT        &lt;dbl&gt; 0.641, 0.536, 0.491, 0.500, 0.461
+## $ FG3A_FREQUENCY &lt;dbl&gt; 0.247, 0.027, 0.016, 0.031, 0.020
+## $ FG3M           &lt;dbl&gt; 6.98, 0.70, 0.39, 0.77, 0.48
+## $ FG3A           &lt;dbl&gt; 20.06, 2.17, 1.27, 2.50, 1.60
+## $ FG3_PCT        &lt;dbl&gt; 0.348, 0.320, 0.308, 0.307, 0.298</pre><p></p>
+<h2>Setup MongoDB</h2>
+<p>Because I couldn&#8217;t get stats.nba.com to work with linux systems, I have to do a full setup in my windows machine. I&#8217;ve never setup the MongoDB in windows before but it seems pretty straightforward following this <a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/">link</a>. If you want to have a nice GUI interface to your mongoDB, <a href="https://www.mongodb.com/products/compass">Mongo Compass</a> is a very good choice.</p>
+<h2>R Interface to MongoDB</h2>
+<p>I have been using <code>mongolite</code> package in R for over a year now, although the de-serialization in query in not very optimal but since I&#8217;m not dealing with crazy amount of data myself(If so, mongo is not recommended for that) so I&#8217;m mostly happy with it.</p>
+<p>Let&#8217;s take a look with some examples:</p><pre class="crayon-plain-tag">library(mongolite)
+
+# create connection to my local standalone mongoDB server, point to a collection called mtcars
+con &lt;- mongo(db = "test",collection = "mtcars", url = "mongodb://localhost:27017")
+
+# delete current data
+con$drop()
+
+# insert data into this database
+con$insert(mtcars)</pre><p></p><pre class="crayon-plain-tag">## List of 5
+##  $ nInserted  : num 32
+##  $ nMatched   : num 0
+##  $ nRemoved   : num 0
+##  $ nUpserted  : num 0
+##  $ writeErrors: list()</pre><p>If you are unfamiliar with NoSQL DB, just think the concept of collections here as tables in SQL databases. Querying the data inside a connection is very straightforward since <code>mongolite</code> is built under S6 framework.</p><pre class="crayon-plain-tag">df &lt;- con$find()
+
+head(df)</pre><p></p><pre class="crayon-plain-tag">##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</pre><p>One thing I like mongo the most is the flexibility. I don&#8217;t have to worry about schemas, I don&#8217;t have to create tables before I insert my data, I don&#8217;t have to worry about the datatypes. I can save a nested dataframe from R directly into Mongo and when I read back, it will be parsed into the original format nicely. For my personal purposes, sometimes I just need a database to hold my data for a certain blog post or project and let me read it when I need it, that is the time Mongo really shines.</p>
+<h2>Create the scraper</h2>
+<p>With the help of mongoDB, the scraping because really easy:</p><pre class="crayon-plain-tag">library(nbaTools)
+library(dplyr)
+library(mongolite)
+library(httr)
+library(futile.logger)
+library(utils)
+
+m &lt;-  mongolite::mongo(db = "NBA",
+                       collection = "Games",
+                       url = "mongodb://localhost:27017")
+
+
+dates &lt;- seq(as.Date("2016/1/1"), as.Date("2018/8/31"), "days")
+
+for (i in 1:length(dates)) {
+  flog.info(paste0("Trying: ", i))
+  xxx &lt;- etGames(Date = dates[i])
+  if(!is.null(xxx)){
+    m$insert(xxx)
+    flog.info(paste0("Inserted: ", i))
+  }
+}</pre><p>With a simple for loop, this script will scrape all the game metadata from 2016 to 2018, and save into Mongo collections. But when I actually running this I found that sometimes the nba.com API will get timeout for some request, maybe the traffic controls was in place? Since they do not have a proper documentation, everything is possible here. To be able to solve this we can write a simple retry function that will retry a certain function if the function failed:</p><pre class="crayon-plain-tag">retry &lt;- function(expr, isError=function(x) "try-error" %in% class(x), maxErrors=3, sleep=0) {
+  attempts = 0
+  retval = try(eval(expr))
+  while (isError(retval)) {
+    attempts = attempts + 1
+    if (attempts &gt;= maxErrors) {
+      msg = sprintf("retry: too many retries [[%s]]", capture.output(str(retval)))
+      flog.fatal(msg)
+      stop(msg)
+    } else {
+      msg = sprintf("retry: error in attempt %i/%i [[%s]]", attempts, maxErrors,
+                    capture.output(str(retval)))
+      flog.error(msg)
+      warning(msg)
+    }
+    if (sleep &gt; 0) Sys.sleep(sleep)
+    retval = try(eval(expr))
+  }
+  return(retval)
+}
+
+m &lt;-  mongolite::mongo(db = "NBA",
+                       collection = "Games",
+                       url = "mongodb://localhost:27017")
+
+
+dates &lt;- seq(as.Date("2016/1/1"), as.Date("2018/8/31"), "days")
+
+for (i in 1:length(dates)) {
+  flog.info(paste0("Trying: ", i))
+  xxx &lt;- retry(GetGames(Date = dates[i]), maxErrors = 3, sleep = 10)
+  if(!is.null(xxx)){
+    m$insert(xxx)
+    flog.info(paste0("Inserted: ", i))
+  }
+}</pre><p>I was able to use this simple script to scrape all the games and play-by-play data from nba.com within hours. In my next post I will do some data cleaning, analysis and modeling using this data I saved into Mongo.</p>
+<p><img src="https://media.giphy.com/media/4Zo1InomnFJWIwIkf7/giphy.gif" alt="" /></p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/scrape-valuable-nba-data-and-preserve-in-mongodb/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+							</item>
+	</channel>
+</rss>

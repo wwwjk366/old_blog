@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Ubuntu Server &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/tag/ubuntu-server/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>Ubuntu Server &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>How to setup your own Rstudio server on Ubuntu Server 15.10</title>
+		<link>https://wwwjk366.github.io/17/</link>
+				<comments>https://wwwjk366.github.io/17/#respond</comments>
+				<pubDate>Tue, 23 Feb 2016 16:30:50 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[Environment Setup]]></category>
+		<category><![CDATA[Linux]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[Rstudio Server]]></category>
+		<category><![CDATA[Ubuntu Server]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=17</guid>
+				<description><![CDATA[Rstudio Server provides multi-user capability and browse-window interface which I found really helpful some time. If you have some spare $$$ to spent on a server (or even a desktop PC) you can perfectly build your own data mining environment in couple of simple steps! Install Ubuntu Server I choose Ubuntu Server 15.10 because I had...]]></description>
+								<content:encoded><![CDATA[<p>Rstudio Server provides multi-user capability and browse-window interface which I found really helpful some time. If you have some spare $$$ to spent on a server (or even a desktop PC) you can perfectly build your own data mining environment in couple of simple steps!</p>
+<h3>Install Ubuntu Server</h3>
+<p>I choose Ubuntu Server 15.10 because I had a really bad experience with Red Hat before and I love some features that Ubuntu has. You can choose any linux system for your server setup.</p>
+<p>You can simply download Ubuntu Server 15.10 <span style="color: #0000ff;"><a style="color: #0000ff;" href="http://www.ubuntu.com/download/server/" target="_blank">here</a></span></p>
+<p>There are plenty of good instructions on the internet regarding how to install the server, <span style="color: #0000ff;"><a style="color: #0000ff;" href="http://www.unixmen.com/how-to-install-ubuntu-15-04-desktop-and-server/" target="_blank">like this one from Unixmen</a></span>.</p>
+<p>If you followed the instruction carefully, you should have no problem boot into the server:</p>
+<p><img class="alignnone size-full wp-image-36" src="https://wwwjk366.github.io/wp-content/uploads/2016/02/VirtualBox_Ubuntu-Server-15_23_02_2016_17_12_12.png" alt="VirtualBox_Ubuntu Server 15_23_02_2016_17_12_12" width="720" height="400" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/02/VirtualBox_Ubuntu-Server-15_23_02_2016_17_12_12.png 720w, https://wwwjk366.github.io/wp-content/uploads/2016/02/VirtualBox_Ubuntu-Server-15_23_02_2016_17_12_12-300x167.png 300w" sizes="(max-width: 720px) 100vw, 720px" /></p>
+<p>I do find GUI desktop to be useful some time and I decided to installed ubuntu desktop by running the following command</p><pre class="crayon-plain-tag">sudo apt-get update
+sudo apt-get install ubuntu-desktop</pre><p></p>
+<p class="">reboot after the installation and the system should automatically boot into desktop environment, that&#8217;s awesome!</p>
+<p><img class="alignnone size-full wp-image-50" src="https://wwwjk366.github.io/wp-content/uploads/2016/02/3.png" alt="3" width="1280" height="800" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/02/3.png 1280w, https://wwwjk366.github.io/wp-content/uploads/2016/02/3-300x188.png 300w, https://wwwjk366.github.io/wp-content/uploads/2016/02/3-768x480.png 768w" sizes="(max-width: 1280px) 100vw, 1280px" /></p>
+<p>The next step is to install R before we can install Rstudio Server, just run the following code in terminal</p><pre class="crayon-plain-tag">sudo apt-get install r-base</pre><p>then base R will be installed, but no one wants to use that, right? Let&#8217;s install Rstudio by using these code,</p>
+<p>64bit machine:</p><pre class="crayon-plain-tag">sudo apt-get install gdebi-core 
+wget https://download2.rstudio.org/rstudio-server-0.99.887-amd64.deb 
+sudo gdebi rstudio-server-0.99.887-amd64.deb</pre><p></p>
+<p class="toolbar:2 lang:default decode:true ">32bit machine:</p>
+<p></p><pre class="crayon-plain-tag">sudo apt-get install gdebi-core
+wget https://download2.rstudio.org/rstudio-server-0.99.887-i386.deb
+sudo gdebi rstudio-server-0.99.887-i386.deb</pre><p></p>
+<p class="toolbar:2 lang:default decode:true ">Now we are done! Try type your <em>server&#8217;s ip:8787</em>  (e.g. 127.0.0.1:8787) on the browser of other computer, you will see the follow screen</p>
+<p><img class="alignnone size-full wp-image-51" src="https://wwwjk366.github.io/wp-content/uploads/2016/02/4.png" alt="4" width="1027" height="569" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/02/4.png 1027w, https://wwwjk366.github.io/wp-content/uploads/2016/02/4-300x166.png 300w, https://wwwjk366.github.io/wp-content/uploads/2016/02/4-768x426.png 768w, https://wwwjk366.github.io/wp-content/uploads/2016/02/4-1024x567.png 1024w" sizes="(max-width: 1027px) 100vw, 1027px" /></p>
+<p>now type in your Ubuntu username/password to start using server version of R!!!</p>
+<p><img class="size-full wp-image-52 aligncenter" src="https://wwwjk366.github.io/wp-content/uploads/2016/02/yes.gif" alt="yes" width="266" height="200" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>PS: Rstudio Server has <span style="color: #0000ff;"><a style="color: #0000ff;" href="https://s3.amazonaws.com/rstudio-server/rstudio-server-pro-0.99.887-admin-guide.pdf" target="_blank">a good document</a> </span>regarding manage Rstudio server. Or leave your comments if you run into any problems!</p>
+<p>&nbsp;</p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/17/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+							</item>
+	</channel>
+</rss>

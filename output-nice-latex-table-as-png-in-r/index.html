@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en-US"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Output Nice Latex Table as PNG in R – Think. Data. Science.</title><script type="text/x-mathjax-config">MathJax.Hub.Config(
+    {tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true}});</script><link rel="dns-prefetch" href="//cdn.mathjax.org"><link rel="dns-prefetch" href="//fonts.googleapis.com"><link rel="dns-prefetch" href="//s.w.org"><link rel="stylesheet" id="formidable-css" href="https://wwwjk366.github.io/wp-content/plugins/formidable/css/formidableforms.css" type="text/css" media="all"><link rel="stylesheet" id="crayon-css" href="https://wwwjk366.github.io/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css" type="text/css" media="all"><link rel="stylesheet" id="crayon-theme-monokai-css" href="https://wwwjk366.github.io/wp-content/plugins/crayon-syntax-highlighter/themes/monokai/monokai.css" type="text/css" media="all"><link rel="stylesheet" id="crayon-font-consolas-css" href="https://wwwjk366.github.io/wp-content/plugins/crayon-syntax-highlighter/fonts/consolas.css" type="text/css" media="all"><link rel="stylesheet" id="fb_data_style-css" href="https://wwwjk366.github.io/wp-content/plugins/feedburner-form/control/fbstyle.css" type="text/css" media="all"><link rel="stylesheet" id="wp-block-library-css" href="https://wwwjk366.github.io/wp-includes/css/dist/block-library/style.min.css" type="text/css" media="all"><link rel="stylesheet" id="pnestyles2-css" href="https://wwwjk366.github.io/wp-content/plugins/plugnedit/css/style.css" type="text/css" media="all"><link rel="stylesheet" id="SFSImainCss-css" href="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/css/sfsi-style.css" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-style-css" href="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/style.css" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-title-font-css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro%3A100%2C300%2C400%2C700&ver=5.1.1" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-body-font-css" href="//fonts.googleapis.com/css?family=Source+Sans+Pro%3A100%2C300%2C400%2C700&ver=5.1.1" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-fontawesome-style-css" href="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/assets/font-awesome/css/font-awesome.min.css" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-nivo-style-css" href="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/assets/css/nivo-slider.css" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-nivo-skin-style-css" href="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/assets/css/nivo-default/default.css" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-bootstrap-style-css" href="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/assets/bootstrap/css/bootstrap.min.css" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-hover-style-css" href="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/assets/css/hover.min.css" type="text/css" media="all"><link rel="stylesheet" id="invisible_assassin-main-theme-style-css" href="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/assets/css/main.css" type="text/css" media="all"><link rel="stylesheet" id="sab-font-css" href="http://fonts.googleapis.com/css?family=Bree+Serif:400,700,400italic,700italic&subset=latin" type="text/css" media="all"><script type="text/javascript" src="https://wwwjk366.github.io/wp-includes/js/jquery/jquery.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-includes/js/jquery/jquery-migrate.min.js"></script><script type="text/javascript">
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"https:\/\/wwwjk366.github.io\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/js/external.js"></script><meta name="specificfeeds-verification-code-aWY5TW5QL242cDdTeGN2NjRXL0NaVkpDQzU2Q3QvMS9oU0ExaW16QjlmbDFxMzQyQTZoQmxxMktmWFdVamNUSHdQdERLekRiV0tTUkhCc0xZbzl1elNxd3lrN21wdnFxWTNEZ3VEc1FNMFpoVlVPdGhVaElRS1F1dUdkR25aWXl8cDJiZEdrU08zMzNiTkNzZzhWd1Zqb3c3Q1VUOVI4WVZJTlRIa1k0Q2dyRT0=" content="D0dqPLN4e45Y5Ze8VjzR"><meta name="viewport" content="width=device-width, initial-scale=1"><meta property="og:image" content="https://wwwjk366.github.io/wp-content/uploads/2017/01/sampletable.jpg" data-id="sfsi"><meta property="og:image:type" content="" data-id="sfsi"><meta property="og:image:width" content="635" data-id="sfsi"><meta property="og:image:height" content="377" data-id="sfsi"><meta property="og:url" content="https://wwwjk366.github.io/output-nice-latex-table-as-png-in-r/" data-id="sfsi"><meta property="og:description" content="Question
+How to save a dataframe as a nice looking pic file? This question came to me when I was trying to build a slack integration with R. The limitaion of Slack message formatting is that it does not support table format. So in order to upload a nice looking table (ASCII table are unbearable to look at), I was searching for a solution. After gathering the infomation from Github and Stackoverflow, I found a neat solution to this problem:
+Solution
+Check out the following R function:
+table.png <- function(obj, name) { 
+  first <- name
+  name <- paste(name,.tex,sep=)
+  sink(file=name)
+  cat('
+\\documentclass{report}
+\\usepackage[paperwidth=5.5in,paperheight=7in,noheadfoot,margin=0in]{geometry}
+\\begin{document}\\pagestyle{empty}
+')
+  print(xtable::xtable(obj))
+  cat('
+\\end{document}
+')
+  sink()
+  tools::texi2dvi(file=name)
+  cmd <- paste(dvipng -T tight, shQuote(paste(first,.dvi,sep=)))
+  invisible(system(cmd))
+  cleaner <- c(.tex,.aux,.log,.dvi)
+  invisible(file.remove(paste(first,cleaner,sep=)))
+}
+ 
+
+Basically what this function does is using xtable to print the dataframe in LaTex format, then use texi2dvi to compile it and use dvipng to convert it into png afterwards.
+
+So make sure you have those app set-up before running this code. I'm using Ubuntu so this is what I did:
+sudo apt-get install dvipng texlive-latex-base texinfo
+
+After everything has been setup, we can call this function
+data(mtcars)
+table.png(head(mtcars),test)
+
+
+
+Now I can send this nice looking table to slack for no problem!
+
+ 
+
+ 
+
+
+
+via GIPHY" data-id="sfsi"><meta property="og:title" content="Output Nice Latex Table as PNG in R" data-id="sfsi"><style id="custom-css-mods">#masthead #site-logo img { transform-origin: left; }.title-font, h1, h2, .section-title, #top-menu ul li a, #static-bar ul li a { font-family: Source Sans Pro; }#masthead h1.site-title a { color: #000000; }#masthead h2.site-description { color: #595959; }</style><style>
+	#masthead {
+			background-image: url(https://wwwjk366.github.io/wp-content/uploads/2016/03/cropped-new_york-wallpaper-1920x1080-1.jpg);
+			background-size: cover;
+			background-position-x: center;
+			background-repeat: no-repeat;
+		}
+	</style><style type="text/css" id="custom-background-css">
+body.custom-background { background-image: url("https://wwwjk366.github.io/wp-content/uploads/2016/03/cropped-new_york-wallpaper-1920x1080.jpg"); background-position: center top; background-size: auto; background-repeat: no-repeat; background-attachment: fixed; }
+</style><link rel="icon" href="https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png" sizes="32x32"><link rel="icon" href="https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_.png" sizes="192x192"><link rel="apple-touch-icon-precomposed" href="https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_.png"><meta name="msapplication-TileImage" content="https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_.png"><script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-74212634-1', 'auto');
+  ga('send', 'pageview');
+</script><link rel="stylesheet" id="mccss_stylesheet" href="https://wwwjk366.github.io/wp-content/uploads/my_custom_css/my_style.css" type="text/css" media="all"></head><body class="post-template-default single single-post postid-205 single-format-standard custom-background">
+
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	
+	<div id="jumbosearch">
+		<span class="fa fa-remove closeicon"></span>
+		<div class="form">
+			<form role="search" method="get" class="search-form" action="https://wwwjk366.github.io/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search …" value="" name="s"></label>
+				<input type="submit" class="search-submit" value="Search"></form>		</div>
+	</div>	
+	
+	<header id="masthead" class="site-header" role="banner"><div class="layer">
+			<div id="top-bar">
+				<div class="container top-bar-container">	
+					
+					<div class="social-icons col-md-6">
+							<a class="hvr-rectangle-out" href="http://feeds2.feedburner.com/thinkdatascience"><i class="fa fa-rss"></i></a>
+		<a class="hvr-rectangle-out" href=""><i class="fa fa-facebook"></i></a>
+		
+					</div>
+	
+					<div class="top-search col-md-6">
+						<form role="search" method="get" class="search-form" action="https://wwwjk366.github.io/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search …" value="" name="s"></label>
+				<input type="submit" class="search-submit" value="Search"></form>					</div>
+				</div>	
+			</div>
+			
+			<div class="site-branding col-md-12">
+								<div id="text-title-desc">
+				<h1 class="site-title title-font"><a href="https://wwwjk366.github.io/" rel="home">Think. Data. Science.</a></h1>
+				<h2 class="site-description title-font">You can have data without information, but you cannot have information without data.</h2>
+				</div>
+			</div>
+				
+			<nav id="top-menu"><div class="menu"><ul><li><a href="https://wwwjk366.github.io/">Home</a></li><li class="page_item page-item-180"><a href="https://wwwjk366.github.io/author-michael-yan/">Author – Michael Yan</a></li>
+</ul></div>
+			</nav></div>	
+	</header><div class="mega-container">
+			
+		<div id="content" class="site-content container">	<div id="primary-mono" class="content-area col-md-8">
+		<main id="main" class="site-main" role="main"><article id="post-205" class="post-205 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized"><header class="entry-header invisible_assassin-single-entry-header"><h1 class="entry-title">Output Nice Latex Table as PNG in R</h1>			
+		<div class="entry-meta">
+			<span class="posted-on">Posted on <a href="https://wwwjk366.github.io/output-nice-latex-table-as-png-in-r/" rel="bookmark"><time class="entry-date published" datetime="2017-01-05T10:41:44-04:00">January 5, 2017</time><time class="updated" datetime="2017-01-05T11:00:48-04:00">January 5, 2017</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="https://wwwjk366.github.io/author/wwwjk366/">Michael Yan</a></span></span>				
+		</div>
+	</header><div id="featured-image">
+			<img width="635" height="377" src="https://wwwjk366.github.io/wp-content/uploads/2017/01/sampletable.jpg" class="attachment-full size-full wp-post-image" alt="" srcset="https://wwwjk366.github.io/wp-content/uploads/2017/01/sampletable.jpg 635w,https://wwwjk366.github.io/wp-content/uploads/2017/01/sampletable-300x178.jpg 300w" sizes="(max-width: 635px) 100vw, 635px"></div>
+
+	<div class="entry-content">
+		<h2>Question</h2>
+<p>How to save a dataframe as a nice looking pic file? This question came to me when I was trying to build a slack integration with R. The limitaion of Slack message formatting is that it does not support table format. So in order to upload a nice looking table (ASCII table are unbearable to look at), I was searching for a solution. After gathering the infomation from Github and Stackoverflow, I found a neat solution to this problem:</p>
+<h2>Solution</h2>
+<p>Check out the following R function:</p>
+
+		<div id="crayon-5cfec35d52961684948328" class="crayon-syntax crayon-theme-monokai crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 18px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 18px !important;">
+table.png <- function(obj, name) { 
+  first <- name
+  name <- paste(name,".tex",sep="")
+  sink(file=name)
+  cat('
+\\documentclass{report}
+\\usepackage[paperwidth=5.5in,paperheight=7in,noheadfoot,margin=0in]{geometry}
+\\begin{document}\\pagestyle{empty}
+')
+  print(xtable::xtable(obj))
+  cat('
+\\end{document}
+')
+  sink()
+  tools::texi2dvi(file=name)
+  cmd <- paste("dvipng -T tight", shQuote(paste(first,".dvi",sep="")))
+  invisible(system(cmd))
+  cleaner <- c(".tex",".aux",".log",".dvi")
+  invisible(file.remove(paste(first,cleaner,sep="")))
+}</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table"><tr class="crayon-row"><td class="crayon-nums " data-settings="hide">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 18px !important;"><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-1">1</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-2">2</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-3">3</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-4">4</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-5">5</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-6">6</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-7">7</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-8">8</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-9">9</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-10">10</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-11">11</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-12">12</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-13">13</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-14">14</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-15">15</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-16">16</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-17">17</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-18">18</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-19">19</div><div class="crayon-num" data-line="crayon-5cfec35d52961684948328-20">20</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 18px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5cfec35d52961684948328-1"><span class="crayon-v">table</span><span class="crayon-sy">.</span><span class="crayon-v">png</span><span class="crayon-h"> </span><span class="crayon-o"><</span><span class="crayon-o">-</span><span class="crayon-h"> </span><span class="crayon-t">function</span><span class="crayon-sy">(</span><span class="crayon-v">obj</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">name</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-sy">{</span><span class="crayon-h"> </span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-2"><span class="crayon-h">  </span><span class="crayon-v">first</span><span class="crayon-h"> </span><span class="crayon-o"><</span><span class="crayon-o">-</span><span class="crayon-h"> </span><span class="crayon-e">name</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-3"><span class="crayon-e">  </span><span class="crayon-v">name</span><span class="crayon-h"> </span><span class="crayon-o"><</span><span class="crayon-o">-</span><span class="crayon-h"> </span><span class="crayon-e">paste</span><span class="crayon-sy">(</span><span class="crayon-v">name</span><span class="crayon-sy">,</span><span class="crayon-s">".tex"</span><span class="crayon-sy">,</span><span class="crayon-v">sep</span><span class="crayon-o">=</span><span class="crayon-s">""</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-4"><span class="crayon-h">  </span><span class="crayon-e">sink</span><span class="crayon-sy">(</span><span class="crayon-v">file</span><span class="crayon-o">=</span><span class="crayon-v">name</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-5"><span class="crayon-h">  </span><span class="crayon-e">cat</span><span class="crayon-sy">(</span><span class="crayon-s">'</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-6"><span class="crayon-s">\\documentclass{report}</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-7"><span class="crayon-s">\\usepackage[paperwidth=5.5in,paperheight=7in,noheadfoot,margin=0in]{geometry}</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-8"><span class="crayon-s">\\begin{document}\\pagestyle{empty}</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-9"><span class="crayon-s">'</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-10"><span class="crayon-h">  </span><span class="crayon-e">print</span><span class="crayon-sy">(</span><span class="crayon-v">xtable</span><span class="crayon-o">::</span><span class="crayon-e">xtable</span><span class="crayon-sy">(</span><span class="crayon-v">obj</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-11"><span class="crayon-h">  </span><span class="crayon-e">cat</span><span class="crayon-sy">(</span><span class="crayon-s">'</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-12"><span class="crayon-s">\\end{document}</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-13"><span class="crayon-s">'</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-14"><span class="crayon-h">  </span><span class="crayon-e">sink</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-15"><span class="crayon-h">  </span><span class="crayon-v">tools</span><span class="crayon-o">::</span><span class="crayon-e">texi2dvi</span><span class="crayon-sy">(</span><span class="crayon-v">file</span><span class="crayon-o">=</span><span class="crayon-v">name</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-16"><span class="crayon-h">  </span><span class="crayon-v">cmd</span><span class="crayon-h"> </span><span class="crayon-o"><</span><span class="crayon-o">-</span><span class="crayon-h"> </span><span class="crayon-e">paste</span><span class="crayon-sy">(</span><span class="crayon-s">"dvipng -T tight"</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-e">shQuote</span><span class="crayon-sy">(</span><span class="crayon-e">paste</span><span class="crayon-sy">(</span><span class="crayon-v">first</span><span class="crayon-sy">,</span><span class="crayon-s">".dvi"</span><span class="crayon-sy">,</span><span class="crayon-v">sep</span><span class="crayon-o">=</span><span class="crayon-s">""</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-17"><span class="crayon-h">  </span><span class="crayon-e">invisible</span><span class="crayon-sy">(</span><span class="crayon-e">system</span><span class="crayon-sy">(</span><span class="crayon-v">cmd</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-18"><span class="crayon-h">  </span><span class="crayon-v">cleaner</span><span class="crayon-h"> </span><span class="crayon-o"><</span><span class="crayon-o">-</span><span class="crayon-h"> </span><span class="crayon-e">c</span><span class="crayon-sy">(</span><span class="crayon-s">".tex"</span><span class="crayon-sy">,</span><span class="crayon-s">".aux"</span><span class="crayon-sy">,</span><span class="crayon-s">".log"</span><span class="crayon-sy">,</span><span class="crayon-s">".dvi"</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-19"><span class="crayon-h">  </span><span class="crayon-e">invisible</span><span class="crayon-sy">(</span><span class="crayon-v">file</span><span class="crayon-sy">.</span><span class="crayon-e">remove</span><span class="crayon-sy">(</span><span class="crayon-e">paste</span><span class="crayon-sy">(</span><span class="crayon-v">first</span><span class="crayon-sy">,</span><span class="crayon-v">cleaner</span><span class="crayon-sy">,</span><span class="crayon-v">sep</span><span class="crayon-o">=</span><span class="crayon-s">""</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d52961684948328-20"><span class="crayon-sy">}</span></div></div></td>
+					</tr></table></div>
+		</div>
+
+<p> </p>
+<p>Basically what this function does is using <strong>xtable</strong> to print the dataframe in LaTex format, then use <strong>texi2dvi</strong> to compile it and use <strong>dvipng</strong> to convert it into png afterwards.</p>
+<p>So make sure you have those app set-up before running this code. I’m using Ubuntu so this is what I did:</p>
+
+		<div id="crayon-5cfec35d5296a355624022" class="crayon-syntax crayon-theme-monokai crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 18px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 18px !important;">
+sudo apt-get install dvipng texlive-latex-base texinfo
+</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table"><tr class="crayon-row"><td class="crayon-nums " data-settings="hide">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 18px !important;"><div class="crayon-num" data-line="crayon-5cfec35d5296a355624022-1">1</div><div class="crayon-num" data-line="crayon-5cfec35d5296a355624022-2">2</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 18px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5cfec35d5296a355624022-1"><span class="crayon-e">sudo </span><span class="crayon-v">apt</span><span class="crayon-o">-</span><span class="crayon-e">get </span><span class="crayon-e">install </span><span class="crayon-e">dvipng </span><span class="crayon-v">texlive</span><span class="crayon-o">-</span><span class="crayon-v">latex</span><span class="crayon-o">-</span><span class="crayon-e">base </span><span class="crayon-i">texinfo</span></div><div class="crayon-line" id="crayon-5cfec35d5296a355624022-2"> </div></div></td>
+					</tr></table></div>
+		</div>
+
+<p>After everything has been setup, we can call this function</p>
+
+		<div id="crayon-5cfec35d5296e026812765" class="crayon-syntax crayon-theme-monokai crayon-font-consolas crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 15px !important; line-height: 18px !important;">
+		
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 18px !important;">
+data("mtcars")
+table.png(head(mtcars),"test")
+</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table"><tr class="crayon-row"><td class="crayon-nums " data-settings="hide">
+					<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 18px !important;"><div class="crayon-num" data-line="crayon-5cfec35d5296e026812765-1">1</div><div class="crayon-num" data-line="crayon-5cfec35d5296e026812765-2">2</div><div class="crayon-num" data-line="crayon-5cfec35d5296e026812765-3">3</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 18px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-5cfec35d5296e026812765-1"><span class="crayon-e">data</span><span class="crayon-sy">(</span><span class="crayon-s">"mtcars"</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d5296e026812765-2"><span class="crayon-v">table</span><span class="crayon-sy">.</span><span class="crayon-e">png</span><span class="crayon-sy">(</span><span class="crayon-e">head</span><span class="crayon-sy">(</span><span class="crayon-v">mtcars</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-s">"test"</span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-5cfec35d5296e026812765-3"> </div></div></td>
+					</tr></table></div>
+		</div>
+
+<p><img src="data:image/png;base64,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" alt=""></p>
+<p>Now I can send this nice looking table to slack for no problem!</p>
+<p> </p>
+<p> </p>
+<p><iframe width="480" height="402" src="//giphy.com/embed/JltOMwYmi0VrO" frameborder="0" class="giphy-embed" allowfullscreen="allowfullscreen"></iframe></p>
+<p><a href="http://giphy.com/gifs/JltOMwYmi0VrO">via GIPHY</a></p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt="" src="http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&d=identicon&r=g" srcset="http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&d=identicon&r=g 2x" class="avatar avatar-100 photo" height="100" width="100" itemprop="image"></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>“In god we trust, all others bring data.”  — William Edwards Deming</p>
+</div></div><div class="clearfix"></div></div>			</div>
+
+	<footer class="entry-footer"><span class="cat-links">Posted in <a href="https://wwwjk366.github.io/category/uncategorized/" rel="category tag">Uncategorized</a></span>	</footer></article><div id="disqus_thread"></div>
+
+		
+		</main></div>
+
+<div id="secondary" class="widget-area col-md-4" role="complementary">
+	<aside id="sfsi-widget-3" class="widget sfsi"><div class="sfsi_widget" data-position="widget">   
+				<div id="sfsi_wDiv"></div>
+                    <div class="norm_row sfsi_wDiv" style="width:225px;text-align:left;position:absolute;"><div style="width:40px; height:40px;margin-left:5px;margin-bottom:5px;" class="sfsi_wicons shuffeldiv "><div class="inerCnt"><a class=" sficn" effect="fade_in" target="_blank" href="http://feeds.feedburner.com/ThinkDataScience" id="sfsiid_rss" alt="RSS" style="opacity:0.6"><img alt="RSS" title="RSS" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/images/icons_theme/flat/flat_rss.png" width="40" height="40" style="" class="sfcm sfsi_wicon" effect="fade_in"></a></div></div><div style="width:40px; height:40px;margin-left:5px;margin-bottom:5px;" class="sfsi_wicons shuffeldiv "><div class="inerCnt"><a class=" sficn" effect="fade_in" target="_blank" href="http://www.specificfeeds.com/widgets/emailSubscribeEncFeed/aWY5TW5QL242cDdTeGN2NjRXL0NaVkpDQzU2Q3QvMS9oU0ExaW16QjlmbDFxMzQyQTZoQmxxMktmWFdVamNUSHdQdERLekRiV0tTUkhCc0xZbzl1elNxd3lrN21wdnFxWTNEZ3VEc1FNMFpoVlVPdGhVaElRS1F1dUdkR25aWXl8cDJiZEdrU08zMzNiTkNzZzhWd1Zqb3c3Q1VUOVI4WVZJTlRIa1k0Q2dyRT0=/OA==/" id="sfsiid_email" alt="Follow by Email" style="opacity:0.6"><img alt="Follow by Email" title="Follow by Email" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/images/icons_theme/flat/flat_email.png" width="40" height="40" style="" class="sfcm sfsi_wicon" effect="fade_in"></a></div></div><div style="width:40px; height:40px;margin-left:5px;margin-bottom:5px;" class="sfsi_wicons shuffeldiv "><div class="inerCnt"><a class=" sficn" effect="fade_in" target="_blank" href="http://" id="sfsiid_facebook" alt="Facebook" style="opacity:0.6"><img alt="Facebook" title="Facebook" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/images/icons_theme/flat/flat_facebook.png" width="40" height="40" style="" class="sfcm sfsi_wicon" effect="fade_in"></a></div></div><div style="width:40px; height:40px;margin-left:5px;margin-bottom:5px;" class="sfsi_wicons shuffeldiv "><div class="inerCnt"><a class=" sficn" effect="fade_in" target="_blank" href="" id="sfsiid_twitter" alt="Twitter" style="opacity:0.6"><img alt="Twitter" title="Twitter" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/images/icons_theme/flat/flat_twitter.png" width="40" height="40" style="" class="sfcm sfsi_wicon" effect="fade_in"></a><div class="sfsi_tool_tip_2 twt_tool_bdr sfsiTlleft" style="width:59px ;opacity:0;z-index:-1;margin-left:-46px;" id="sfsiid_twitter"><span class="bot_arow bot_twt_arow"></span><div class="sfsi_inside"><div class="icon2"><a rel="nofollow" href="http://twitter.com/share" data-count="none" class="sr-twitter-button twitter-share-button" lang="en" data-url="https://wwwjk366.github.io/output-nice-latex-table-as-png-in-r" data-text="Hey, check out this cool site I found: thinkdatascience.com #Topic via@my_twitter_name"></a></div></div></div></div></div><div style="width:40px; height:40px;margin-left:5px;margin-bottom:5px;" class="sfsi_wicons shuffeldiv "><div class="inerCnt"><a class=" sficn" effect="fade_in" target="_blank" href="https://ca.linkedin.com/in/michaelyan3" id="sfsiid_linkedin" alt="LinkedIn" style="opacity:0.6"><img alt="LinkedIn" title="LinkedIn" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/images/icons_theme/flat/flat_linkedin.png" width="40" height="40" style="" class="sfcm sfsi_wicon" effect="fade_in"></a></div></div></div><div id="sfsi_holder" class="sfsi_holders" style="position: relative; float: left;width:100%;z-index:-1;"></div><script>jQuery(".sfsi_widget").each(function( index ) {
+					if(jQuery(this).attr("data-position") == "widget")
+					{
+						var wdgt_hght = jQuery(this).children(".norm_row.sfsi_wDiv").height();
+						var title_hght = jQuery(this).parent(".widget.sfsi").children(".widget-title").height();
+						var totl_hght = parseInt( title_hght ) + parseInt( wdgt_hght );
+						jQuery(this).parent(".widget.sfsi").css("min-height", totl_hght+"px");
+					}
+				});</script><div style="clear: both;"></div>
+            </div>
+            </aside><aside id="tag_cloud-5" class="widget widget_tag_cloud"><h1 class="widget-title title-font">Tags</h1><div class="tagcloud"><a href="https://wwwjk366.github.io/tag/data/" class="tag-cloud-link tag-link-34 tag-link-position-1" style="font-size: 8pt;" aria-label="Data (1 item)">Data</a>
+<a href="https://wwwjk366.github.io/tag/freetds/" class="tag-cloud-link tag-link-14 tag-link-position-2" style="font-size: 11.4054054054pt;" aria-label="Freetds (2 items)">Freetds</a>
+<a href="https://wwwjk366.github.io/tag/iphonese/" class="tag-cloud-link tag-link-20 tag-link-position-3" style="font-size: 8pt;" aria-label="iphoneSE (1 item)">iphoneSE</a>
+<a href="https://wwwjk366.github.io/tag/kaggle/" class="tag-cloud-link tag-link-27 tag-link-position-4" style="font-size: 8pt;" aria-label="Kaggle (1 item)">Kaggle</a>
+<a href="https://wwwjk366.github.io/tag/linux/" class="tag-cloud-link tag-link-11 tag-link-position-5" style="font-size: 11.4054054054pt;" aria-label="Linux (2 items)">Linux</a>
+<a href="https://wwwjk366.github.io/tag/machine-learning/" class="tag-cloud-link tag-link-28 tag-link-position-6" style="font-size: 8pt;" aria-label="Machine Learning (1 item)">Machine Learning</a>
+<a href="https://wwwjk366.github.io/tag/mongodb/" class="tag-cloud-link tag-link-31 tag-link-position-7" style="font-size: 8pt;" aria-label="MongoDB (1 item)">MongoDB</a>
+<a href="https://wwwjk366.github.io/tag/mysql/" class="tag-cloud-link tag-link-15 tag-link-position-8" style="font-size: 8pt;" aria-label="MySQL (1 item)">MySQL</a>
+<a href="https://wwwjk366.github.io/tag/nba/" class="tag-cloud-link tag-link-33 tag-link-position-9" style="font-size: 8pt;" aria-label="NBA (1 item)">NBA</a>
+<a href="https://wwwjk366.github.io/tag/nlp/" class="tag-cloud-link tag-link-22 tag-link-position-10" style="font-size: 8pt;" aria-label="NLP (1 item)">NLP</a>
+<a href="https://wwwjk366.github.io/tag/oscar/" class="tag-cloud-link tag-link-17 tag-link-position-11" style="font-size: 8pt;" aria-label="Oscar (1 item)">Oscar</a>
+<a href="https://wwwjk366.github.io/tag/parallel-computing/" class="tag-cloud-link tag-link-26 tag-link-position-12" style="font-size: 8pt;" aria-label="Parallel Computing (1 item)">Parallel Computing</a>
+<a href="https://wwwjk366.github.io/tag/r/" class="tag-cloud-link tag-link-3 tag-link-position-13" style="font-size: 22pt;" aria-label="R (10 items)">R</a>
+<a href="https://wwwjk366.github.io/tag/rodbc/" class="tag-cloud-link tag-link-18 tag-link-position-14" style="font-size: 8pt;" aria-label="RODBC (1 item)">RODBC</a>
+<a href="https://wwwjk366.github.io/tag/rstudio-server/" class="tag-cloud-link tag-link-10 tag-link-position-15" style="font-size: 11.4054054054pt;" aria-label="Rstudio Server (2 items)">Rstudio Server</a>
+<a href="https://wwwjk366.github.io/tag/sentiment-analysis/" class="tag-cloud-link tag-link-19 tag-link-position-16" style="font-size: 11.4054054054pt;" aria-label="sentiment analysis (2 items)">sentiment analysis</a>
+<a href="https://wwwjk366.github.io/tag/syuzhet/" class="tag-cloud-link tag-link-21 tag-link-position-17" style="font-size: 8pt;" aria-label="syuzhet (1 item)">syuzhet</a>
+<a href="https://wwwjk366.github.io/tag/text-mining/" class="tag-cloud-link tag-link-16 tag-link-position-18" style="font-size: 13.6756756757pt;" aria-label="text mining (3 items)">text mining</a>
+<a href="https://wwwjk366.github.io/tag/twitter/" class="tag-cloud-link tag-link-4 tag-link-position-19" style="font-size: 11.4054054054pt;" aria-label="TwitteR (2 items)">TwitteR</a>
+<a href="https://wwwjk366.github.io/tag/ubuntu/" class="tag-cloud-link tag-link-13 tag-link-position-20" style="font-size: 11.4054054054pt;" aria-label="Ubuntu (2 items)">Ubuntu</a>
+<a href="https://wwwjk366.github.io/tag/ubuntu-server/" class="tag-cloud-link tag-link-9 tag-link-position-21" style="font-size: 8pt;" aria-label="Ubuntu Server (1 item)">Ubuntu Server</a></div>
+</aside><aside id="subscriber_widget-3" class="widget widget_subscriber_widget"><div class="sfsi_subscribe_Popinner">
+					<form method="post" onsubmit="return sfsi_processfurther(this);" target="popupwindow" action="https://www.specificfeeds.com/widgets/subscribeWidget/aWY5TW5QL242cDdTeGN2NjRXL0NaVkpDQzU2Q3QvMS9oU0ExaW16QjlmbDFxMzQyQTZoQmxxMktmWFdVamNUSHdQdERLekRiV0tTUkhCc0xZbzl1elNxd3lrN21wdnFxWTNEZ3VEc1FNMFpoVlVPdGhVaElRS1F1dUdkR25aWXl8cDJiZEdrU08zMzNiTkNzZzhWd1Zqb3c3Q1VUOVI4WVZJTlRIa1k0Q2dyRT0=/8/">
+						<h5>Get new posts by email</h5>
+						<div class="sfsi_subscription_form_field">
+							<input type="email" name="data[Widget][email]" value="" placeholder="Enter your email"></div>
+						<div class="sfsi_subscription_form_field">
+							<input type="hidden" name="data[Widget][feed_id]" value="aWY5TW5QL242cDdTeGN2NjRXL0NaVkpDQzU2Q3QvMS9oU0ExaW16QjlmbDFxMzQyQTZoQmxxMktmWFdVamNUSHdQdERLekRiV0tTUkhCc0xZbzl1elNxd3lrN21wdnFxWTNEZ3VEc1FNMFpoVlVPdGhVaElRS1F1dUdkR25aWXl8cDJiZEdrU08zMzNiTkNzZzhWd1Zqb3c3Q1VUOVI4WVZJTlRIa1k0Q2dyRT0="><input type="hidden" name="data[Widget][feedtype]" value="8"><input type="submit" name="subscribe" value="Subscribe"></div>
+					</form>
+				</div></aside><aside id="recent-posts-4" class="widget widget_recent_entries"><h1 class="widget-title title-font">Recent Posts</h1>		<ul><li>
+					<a href="https://wwwjk366.github.io/two-simple-yet-powerful-packages-r/">Two Simple Yet Powerful Packages that Every Data Scientist using R Should Know</a>
+									</li>
+											<li>
+					<a href="https://wwwjk366.github.io/a-non-modeling-approach-scored-top-50-in-a-data-science-competition/">A Non-Modeling Approach Scored Top 50 in a Data Science Competition</a>
+									</li>
+											<li>
+					<a href="https://wwwjk366.github.io/scrape-valuable-nba-data-and-preserve-in-mongodb/">Scrape Valuable NBA Data and Preserve in MongoDB</a>
+									</li>
+											<li>
+					<a href="https://wwwjk366.github.io/pbdr-a-forgotten-mpi-tool-for-r/">pbdR — A Forgotten MPI Tool for R</a>
+									</li>
+											<li>
+					<a href="https://wwwjk366.github.io/home-credit-default-risk-kaggle-competition-summary-2/">Home Credit Default Risk Kaggle Competition Summary</a>
+									</li>
+					</ul></aside><aside id="rss-3" class="widget widget_rss"><h1 class="widget-title title-font"><a class="rsswidget" href="http://feeds.feedburner.com/RBloggers"><img class="rss-widget-icon" style="border:0" width="14" height="14" src="https://wwwjk366.github.io/wp-includes/images/rss.png" alt="RSS"></a> <a class="rsswidget" href="https://www.r-bloggers.com/">r-bloggers</a></h1><ul><li><a class="rsswidget" href="http://feedproxy.google.com/~r/RBloggers/~3/fYcMd_HYUcA/">#22: Using Rocker and PPAs for Fun and Profit</a></li><li><a class="rsswidget" href="http://feedproxy.google.com/~r/RBloggers/~3/GU9OCPrfG_k/">Wrapping Up Exploration of John Deereâ&#128;&#153;s MowerPlus Database</a></li><li><a class="rsswidget" href="http://feedproxy.google.com/~r/RBloggers/~3/hIY1Xr5nwXw/">littler 0.3.8: Several nice new features</a></li><li><a class="rsswidget" href="http://feedproxy.google.com/~r/RBloggers/~3/R50H21r4W-0/">The most important chart for long-term investors</a></li><li><a class="rsswidget" href="http://feedproxy.google.com/~r/RBloggers/~3/CjGAARpTPic/">Running UMAP for data visualisation in R</a></li></ul></aside></div>
+
+	</div>
+
+	 </div>
+ 
+	<footer id="colophon" class="site-footer" role="contentinfo"><div class="site-info container">
+			Theme Designed by <a href="http://rohitink.com" rel="nofollow">Rohit</a>.			<span class="sep"></span>
+			Â© 2016 Michael Yan All Rights Reserved.		</div>
+	</footer></div>
+
+
+        
+        <div id="fb-root"></div>
+		<script>(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+		  	if (d.getElementById(id)) return;
+		  	js = d.createElement(s); js.id = id;
+		  	js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+		  	fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script><script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script><script>
+                jQuery( document ).scroll(function( $ )
+                {
+                    var y = jQuery(this).scrollTop();
+            
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+                    {    
+                       if(jQuery(window).scrollTop() + jQuery(window).height() >= jQuery(document).height()-100)
+                       {
+                          jQuery('.sfsi_outr_div').css({'z-index':'9996',opacity:1,top:jQuery(window).scrollTop()+"px",position:"absolute"});
+                          jQuery('.sfsi_outr_div').fadeIn(200);
+                          jQuery('.sfsi_FrntInner_chg').fadeIn(200);
+                       }
+                       else{
+                           jQuery('.sfsi_outr_div').fadeOut();
+                           jQuery('.sfsi_FrntInner_chg').fadeOut();
+                       }
+                  }
+                  else
+                  {
+                       if(jQuery(window).scrollTop() + jQuery(window).height() >= jQuery(document).height()-3)
+                       {
+                            jQuery('.sfsi_outr_div').css({'z-index':'9996',opacity:1,top:jQuery(window).scrollTop()+200+"px",position:"absolute"});
+                            jQuery('.sfsi_outr_div').fadeIn(200);
+                            jQuery('.sfsi_FrntInner_chg').fadeIn(200);
+                       }
+                       else
+                       {
+                         jQuery('.sfsi_outr_div').fadeOut();
+                         jQuery('.sfsi_FrntInner_chg').fadeOut();
+                       }
+                  } 
+                });
+             </script><script>
+			jQuery(document).ready(function(e) {
+                jQuery("body").addClass("sfsi_2.20")
+            });
+			function sfsi_processfurther(ref) {
+				var feed_id = 'aWY5TW5QL242cDdTeGN2NjRXL0NaVkpDQzU2Q3QvMS9oU0ExaW16QjlmbDFxMzQyQTZoQmxxMktmWFdVamNUSHdQdERLekRiV0tTUkhCc0xZbzl1elNxd3lrN21wdnFxWTNEZ3VEc1FNMFpoVlVPdGhVaElRS1F1dUdkR25aWXl8cDJiZEdrU08zMzNiTkNzZzhWd1Zqb3c3Q1VUOVI4WVZJTlRIa1k0Q2dyRT0=';
+				var feedtype = 8;
+				var email = jQuery(ref).find('input[name="data[Widget][email]"]').val();
+				var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+				if ((email != "Enter your email") && (filter.test(email))) {
+					if (feedtype == "8") {
+						var url ="https://www.specificfeeds.com/widgets/subscribeWidget/"+feed_id+"/"+feedtype;
+						window.open('', "popupwindow", "scrollbars=yes,width=1080,height=760");
+						ref.action=url;
+						ref.target="popupwindow";
+						return true;
+					}else{
+						return false
+					}
+				} else {
+					alert("Please enter email address");
+					jQuery(ref).find('input[name="data[Widget][email]"]').focus();
+					return false;
+				}
+			}
+		</script><style type="text/css" aria-selected="true">
+			.sfsi_subscribe_Popinner
+			{
+								width: 100% !important;
+				height: auto !important;
+												border: 1px solid #b5b5b5 !important;
+								padding: 18px 0px !important;
+				background-color: #ffffff !important;
+			}
+			.sfsi_subscribe_Popinner form
+			{
+				margin: 0 20px !important;
+			}
+			.sfsi_subscribe_Popinner h5
+			{
+				font-family: Helvetica,Arial,sans-serif !important;
+								font-weight: bold !important;
+								color: #000000 !important;
+				font-size: 16px !important;
+				text-align: center !important;
+				margin: 0 0 10px !important;
+    			padding: 0 !important;
+			}
+			.sfsi_subscription_form_field {
+				margin: 5px 0 !important;
+				width: 100% !important;
+				display: inline-flex;
+				display: -webkit-inline-flex;
+			}
+			.sfsi_subscription_form_field input {
+				width: 100% !important;
+				padding: 10px 0px !important;
+			}
+			.sfsi_subscribe_Popinner input[type=email]
+			{
+				font-family: Helvetica,Arial,sans-serif !important;
+								font-style: normal !important;
+								color:  !important;
+				font-size: 14px !important;
+				text-align: center !important;
+			}
+			.sfsi_subscribe_Popinner input[type=email]::-webkit-input-placeholder {
+			   	font-family: Helvetica,Arial,sans-serif !important;
+								font-style: normal !important;
+								color:  !important;
+				font-size: 14px !important;
+				text-align: center !important;
+			}
+			.sfsi_subscribe_Popinner input[type=email]:-moz-placeholder { /* Firefox 18- */
+			    font-family: Helvetica,Arial,sans-serif !important;
+								font-style: normal !important;
+								color:  !important;
+				font-size: 14px !important;
+				text-align: center !important;
+			}
+			.sfsi_subscribe_Popinner input[type=email]::-moz-placeholder {  /* Firefox 19+ */
+			    font-family: Helvetica,Arial,sans-serif !important;
+								font-style: normal !important;
+								color:  !important;
+				font-size: 14px !important;
+				text-align: center !important;
+			}
+			.sfsi_subscribe_Popinner input[type=email]:-ms-input-placeholder {  
+			  	font-family: Helvetica,Arial,sans-serif !important;
+								font-style: normal !important;
+								color:  !important;
+				font-size: 14px !important;
+				text-align: center !important;
+			}
+			.sfsi_subscribe_Popinner input[type=submit]
+			{
+				font-family: Helvetica,Arial,sans-serif !important;
+								font-weight: bold !important;
+								color: #000000 !important;
+				font-size: 16px !important;
+				text-align: center !important;
+				background-color: #dedede !important;
+			}
+		</style><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js">
+    </script><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/languages/r.min.js">
+    </script><script>hljs.initHighlightingOnLoad();</script><style type="text/css">.saboxplugin-wrap{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;border:1px solid #eee;width:100%;clear:both;display:block;overflow:hidden;word-wrap:break-word;position:relative}.saboxplugin-wrap .saboxplugin-gravatar{float:left;padding:20px}.saboxplugin-wrap .saboxplugin-gravatar img{max-width:100px;height:auto;border-radius:0;}.saboxplugin-wrap .saboxplugin-authorname{font-size:18px;line-height:1;margin:20px 0 0 20px;display:block}.saboxplugin-wrap .saboxplugin-authorname a{text-decoration:none}.saboxplugin-wrap .saboxplugin-authorname a:focus{outline:0}.saboxplugin-wrap .saboxplugin-desc{display:block;margin:5px 20px}.saboxplugin-wrap .saboxplugin-desc a{text-decoration:underline}.saboxplugin-wrap .saboxplugin-desc p{margin:5px 0 12px}.saboxplugin-wrap .saboxplugin-web{margin:0 20px 15px;text-align:left}.saboxplugin-wrap .sab-web-position{text-align:right}.saboxplugin-wrap .saboxplugin-web a{color:#ccc;text-decoration:none}.saboxplugin-wrap .saboxplugin-socials{position:relative;display:block;background:#fcfcfc;padding:5px;border-top:1px solid #eee}.saboxplugin-wrap .saboxplugin-socials a svg{width:20px;height:20px}.saboxplugin-wrap .saboxplugin-socials a svg .st2{fill:#fff}.saboxplugin-wrap .saboxplugin-socials a svg .st1{fill:rgba(0,0,0,.3)}.saboxplugin-wrap .saboxplugin-socials a:hover{opacity:.8;-webkit-transition:opacity .4s;-moz-transition:opacity .4s;-o-transition:opacity .4s;transition:opacity .4s;box-shadow:none!important;-webkit-box-shadow:none!important}.saboxplugin-wrap .saboxplugin-socials .saboxplugin-icon-color{box-shadow:none;padding:0;border:0;-webkit-transition:opacity .4s;-moz-transition:opacity .4s;-o-transition:opacity .4s;transition:opacity .4s;display:inline-block;color:#fff;font-size:0;text-decoration:inherit;margin:5px;-webkit-border-radius:0;-moz-border-radius:0;-ms-border-radius:0;-o-border-radius:0;border-radius:0;overflow:hidden}.saboxplugin-wrap .saboxplugin-socials .saboxplugin-icon-grey{text-decoration:inherit;box-shadow:none;position:relative;display:-moz-inline-stack;display:inline-block;vertical-align:middle;zoom:1;margin:10px 5px;color:#444}.clearfix:after,.clearfix:before{content:' ';display:table;line-height:0;clear:both}.ie7 .clearfix{zoom:1}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-twitch{border-color:#38245c}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-addthis{border-color:#e91c00}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-behance{border-color:#003eb0}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-delicious{border-color:#06c}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-deviantart{border-color:#036824}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-digg{border-color:#00327c}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-dribbble{border-color:#ba1655}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-facebook{border-color:#1e2e4f}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-flickr{border-color:#003576}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-github{border-color:#264874}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-google{border-color:#0b51c5}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-googleplus{border-color:#96271a}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-html5{border-color:#902e13}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-instagram{border-color:#1630aa}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-linkedin{border-color:#00344f}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-pinterest{border-color:#5b040e}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-reddit{border-color:#992900}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-rss{border-color:#a43b0a}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-sharethis{border-color:#5d8420}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-skype{border-color:#00658a}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-soundcloud{border-color:#995200}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-spotify{border-color:#0f612c}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-stackoverflow{border-color:#a95009}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-steam{border-color:#006388}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-user_email{border-color:#b84e05}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-stumbleUpon{border-color:#9b280e}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-tumblr{border-color:#10151b}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-twitter{border-color:#0967a0}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-vimeo{border-color:#0d7091}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-windows{border-color:#003f71}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-wordpress{border-color:#0f3647}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-yahoo{border-color:#14002d}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-youtube{border-color:#900}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-xing{border-color:#000202}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-mixcloud{border-color:#2475a0}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-vk{border-color:#243549}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-medium{border-color:#00452c}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-quora{border-color:#420e00}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-meetup{border-color:#9b181c}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-goodreads{border-color:#000}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-snapchat{border-color:#999700}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-500px{border-color:#00557f}.saboxplugin-socials.sabox-colored .saboxplugin-icon-color .sab-mastodont{border-color:#185886}.sabox-plus-item{margin-bottom:20px}@media screen and (max-width:480px){.saboxplugin-wrap{text-align:center}.saboxplugin-wrap .saboxplugin-gravatar{float:none;padding:20px 0;text-align:center;margin:0 auto;display:block}.saboxplugin-wrap .saboxplugin-gravatar img{float:none;display:inline-block;display:-moz-inline-stack;vertical-align:middle;zoom:1}.saboxplugin-wrap .saboxplugin-desc{margin:0 10px 20px;text-align:center}.saboxplugin-wrap .saboxplugin-authorname{text-align:center;margin:10px 0 20px}}body .saboxplugin-authorname a,body .saboxplugin-authorname a:hover{box-shadow:none;-webkit-box-shadow:none}a.sab-profile-edit{font-size:16px!important;line-height:1!important}.sab-edit-settings a,a.sab-profile-edit{color:#0073aa!important;box-shadow:none!important;-webkit-box-shadow:none!important}.sab-edit-settings{margin-right:15px;position:absolute;right:0;z-index:2;bottom:10px;line-height:20px}.sab-edit-settings i{margin-left:5px}.saboxplugin-socials{line-height:1!important}.rtl .saboxplugin-wrap .saboxplugin-gravatar{float:right}.rtl .saboxplugin-wrap .saboxplugin-authorname{display:flex;align-items:center}.rtl .saboxplugin-wrap .saboxplugin-authorname .sab-profile-edit{margin-right:10px}.rtl .sab-edit-settings{right:auto;left:0}img.sab-custom-avatar{max-width:75px;}.saboxplugin-wrap .saboxplugin-gravatar img {-webkit-border-radius:50%;-moz-border-radius:50%;-ms-border-radius:50%;-o-border-radius:50%;border-radius:50%;}.saboxplugin-wrap .saboxplugin-socials .saboxplugin-icon-color .st1 {display: none;}.saboxplugin-wrap .saboxplugin-gravatar img {-webkit-transition:all .5s ease;-moz-transition:all .5s ease;-o-transition:all .5s ease;transition:all .5s ease;}.saboxplugin-wrap .saboxplugin-gravatar img:hover {-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg);}.saboxplugin-wrap .saboxplugin-socials .saboxplugin-icon-color svg {border-width: 1px;border-style:solid;}.saboxplugin-wrap .saboxplugin-desc a, .saboxplugin-wrap .saboxplugin-desc  {color:0 !important;}.saboxplugin-wrap .saboxplugin-authorname {font-family:"Bree Serif";}.saboxplugin-wrap .saboxplugin-desc {font-family:Bree Serif;}.saboxplugin-wrap {margin-top:0px; margin-bottom:0px; padding: 0px 0px }.saboxplugin-wrap .saboxplugin-authorname {font-size:16px; line-height:23px;}.saboxplugin-wrap .saboxplugin-desc p, .saboxplugin-wrap .saboxplugin-desc {font-size:14px !important; line-height:21px !important;}.saboxplugin-wrap .saboxplugin-web {font-size:14px;}.saboxplugin-wrap .saboxplugin-socials a svg {width:36px;height:36px;}</style><link rel="stylesheet" id="highlight-css" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css?ver=5.1.1" type="text/css" media="all"><script type="text/javascript">
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"thinkdatascience"};
+/* ]]> */
+</script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/plugins/disqus-comment-system/public/js/comment_count.js"></script><script type="text/javascript">
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"integration":"wordpress 3.0.17"},"disqusIdentifier":"205 https:\/\/wwwjk366.github.io\/?p=205","disqusShortname":"thinkdatascience","disqusTitle":"Output Nice Latex Table as PNG in R","disqusUrl":"https:\/\/wwwjk366.github.io\/output-nice-latex-table-as-png-in-r\/","postId":"205"};
+/* ]]> */
+</script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/plugins/disqus-comment-system/public/js/comment_embed.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-includes/js/jquery/ui/core.min.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/js/shuffle/modernizr.custom.min.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/js/shuffle/jquery.shuffle.min.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/js/shuffle/random-shuffle-min.js"></script><script type="text/javascript">
+/* <![CDATA[ */
+var sfsi_icon_ajax_object = {"ajax_url":"https:\/\/wwwjk366.github.io\/wp-admin\/admin-ajax.php"};
+var sfsi_icon_ajax_object = {"ajax_url":"https:\/\/wwwjk366.github.io\/wp-admin\/admin-ajax.php","plugin_url":"https:\/\/wwwjk366.github.io\/wp-content\/plugins\/ultimate-social-media-icons\/"};
+/* ]]> */
+</script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/plugins/ultimate-social-media-icons/js/custom.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/js/navigation.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/js/skip-link-focus-fix.js"></script><script type="text/javascript" src="https://wwwjk366.github.io/wp-content/themes/invisible-assassin/js/custom.js"></script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&ver=5.1.1"></script></body></html>

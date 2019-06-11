@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Kaggle &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/tag/kaggle/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>Kaggle &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Home Credit Default Risk Kaggle Competition Summary</title>
+		<link>https://wwwjk366.github.io/home-credit-default-risk-kaggle-competition-summary-2/</link>
+				<comments>https://wwwjk366.github.io/home-credit-default-risk-kaggle-competition-summary-2/#respond</comments>
+				<pubDate>Sat, 15 Sep 2018 20:00:05 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[Kaggle Summary]]></category>
+		<category><![CDATA[Kaggle]]></category>
+		<category><![CDATA[Machine Learning]]></category>
+		<category><![CDATA[R]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=226</guid>
+				<description><![CDATA[It&#8217;s been a long time since I update my blog, I felt like its a good time now to restart this very meaningful hobby 🙂 I will use this post to do a quick summary of what I did on Home Credit Default Risk Kaggle Competition(links here). It is a good way to keep track...]]></description>
+								<content:encoded><![CDATA[<p>It&#8217;s been a long time since I update my blog, I felt like its a good time now to restart this very meaningful hobby <img src="https://s.w.org/images/core/emoji/11.2.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /> I will use this post to do a quick summary of what I did on Home Credit Default Risk Kaggle Competition(<a href="https://www.kaggle.com/c/home-credit-default-risk">links here</a>). It is a good way to keep track of what I did, what I learned and help other data scientist that checking out my blog.</p>
+<h2>Getting started</h2>
+<p>I started this competition fairly late(about 20 days remaining), therefore I didn&#8217;t have a lot of time to do everything by myself so I decided to “cheat” a little bit by looking at some good kernels. <a href="https://www.kaggle.com/willkoehrsen/start-here-a-gentle-introduction">first kernel</a> and <a href="https://www.kaggle.com/codename007/home-credit-complete-eda-feature-importance">second kernel</a> helped me a lot by saving a great deal of time of doing those analysis by myself.</p>
+<p>After gain some familiarity with the data and the problem, I&#8217;m ready to try the first model — XGBoost (of course). Here I cheated again by forking the xgboost R kernel with highest public score. This simple model only utilized the main <code>train.csv</code> data but provided a great start for me. Here are the parameters for the XGB model</p><pre class="crayon-plain-tag">p &lt;- list(objective = "binary:logistic",
+          booster = "gbtree",
+          eval_metric = "auc",
+          nthread = 16,
+          eta = 0.025,
+          max_depth = 6,
+          min_child_weight = 19,
+          gamma = 0,
+          subsample = 0.8,
+          colsample_bytree = 0.632,
+          alpha = 0,
+          lambda = 0.05,
+          nrounds = 2000)</pre><p>This model scored <code>0.77400</code> on the public leaderboard.</p>
+<h2>Adding more features</h2>
+<p>The first improvement I made is adding the rest of the data to the model:</p><pre class="crayon-plain-tag">avg_bureau &lt;- bureau %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(funs(mean(., na.rm = TRUE), max, min)) %&gt;% 
+  mutate(buro_count = bureau %&gt;%  
+           group_by(SK_ID_CURR) %&gt;% 
+           count() %$% n)
+
+avg_cred_card_bal &lt;- cred_card_bal %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(funs(mean(., na.rm = TRUE), max, min)) %&gt;% 
+  mutate(card_count = cred_card_bal %&gt;%  
+           group_by(SK_ID_CURR) %&gt;% 
+           count() %$% n)
+
+avg_pos_cash_bal &lt;- pos_cash_bal %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(funs(mean(., na.rm = TRUE), max, min)) %&gt;% 
+  mutate(pos_count = pos_cash_bal %&gt;%  
+           group_by(SK_ID_PREV, SK_ID_CURR) %&gt;% 
+           group_by(SK_ID_CURR) %&gt;% 
+           count() %$% n)
+
+avg_prev &lt;- prev %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(funs(mean(., na.rm = TRUE), max, min)) %&gt;% 
+  mutate(nb_app = prev %&gt;%  
+           group_by(SK_ID_CURR) %&gt;% 
+           count() %$% n)
+
+avg_install_pmt &lt;- install_pmt %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(funs(mean(., na.rm = TRUE), max, min)) %&gt;% 
+  mutate(pos_count = install_pmt %&gt;%  
+           group_by(SK_ID_PREV, SK_ID_CURR) %&gt;% 
+           group_by(SK_ID_CURR) %&gt;% 
+           count() %$% n)</pre><p>At the same time I am also doing some basic feature engineering work — <strong>Mean Encoding</strong>. finding the means of all variables and join back with the main dataset.</p>
+<p>I trained the XGB model again with following parameters:</p><pre class="crayon-plain-tag">p &lt;- list(objective = "binary:logistic",
+          booster = "gbtree",
+          eval_metric = "auc",
+          nthread = 16,
+          eta = 0.025,
+          max_depth = 5,
+          min_child_weight = 20,
+          gamma = 0,
+          subsample = 0.8,
+          colsample_bytree = 0.7,
+          alpha = 0,
+          lambda = 0.05,
+          scale_pos_weight = 1,
+          nrounds = 2000)</pre><p>now the public score is up to <code>0.77627</code>, great!</p>
+<p>If mean encoding is working, why not getting more greedy? we can take the mean, std, max, min and number of distinct value of all variables from all tables.<br />
+This brings the total number of variables to over 500:</p><pre class="crayon-plain-tag">fn &lt;- funs(mean, sd, min, max, sum, n_distinct, .args = list(na.rm = TRUE))
+
+sum_bbalance &lt;- bbalance %&gt;%
+  mutate_if(is.character, funs(factor(.) %&gt;% as.integer)) %&gt;% 
+  group_by(SK_ID_BUREAU) %&gt;% 
+  summarise_all(fn) 
+
+sum_bureau &lt;- bureau %&gt;% 
+  left_join(sum_bbalance, by = "SK_ID_BUREAU") %&gt;% 
+  select(-SK_ID_BUREAU) %&gt;% 
+  mutate_if(is.character, funs(factor(.) %&gt;% as.integer)) %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(fn)
+
+sum_cc_balance &lt;- cc_balance %&gt;% 
+  select(-SK_ID_PREV) %&gt;% 
+  mutate_if(is.character, funs(factor(.) %&gt;% as.integer)) %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(fn)
+
+sum_payments &lt;- payments %&gt;% 
+  select(-SK_ID_PREV) %&gt;% 
+  mutate(PAYMENT_PERC = AMT_PAYMENT / AMT_INSTALMENT,
+         PAYMENT_DIFF = AMT_INSTALMENT - AMT_PAYMENT,
+         DPD = DAYS_ENTRY_PAYMENT - DAYS_INSTALMENT,
+         DBD = DAYS_INSTALMENT - DAYS_ENTRY_PAYMENT,
+         DPD = ifelse(DPD &gt; 0, DPD, 0),
+         DBD = ifelse(DBD &gt; 0, DBD, 0)) %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(fn) 
+
+sum_pc_balance &lt;- pc_balance %&gt;% 
+  select(-SK_ID_PREV) %&gt;% 
+  mutate_if(is.character, funs(factor(.) %&gt;% as.integer)) %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(fn)
+# rm(pc_balance); gc()
+
+sum_prev &lt;- prev %&gt;%
+  select(-SK_ID_PREV) %&gt;% 
+  mutate_if(is.character, funs(factor(.) %&gt;% as.integer)) %&gt;% 
+  mutate(DAYS_FIRST_DRAWING = ifelse(DAYS_FIRST_DRAWING == 365243, NA, DAYS_FIRST_DRAWING),
+         DAYS_FIRST_DUE = ifelse(DAYS_FIRST_DUE == 365243, NA, DAYS_FIRST_DUE),
+         DAYS_LAST_DUE_1ST_VERSION = ifelse(DAYS_LAST_DUE_1ST_VERSION == 365243, NA, DAYS_LAST_DUE_1ST_VERSION),
+         DAYS_LAST_DUE = ifelse(DAYS_LAST_DUE == 365243, NA, DAYS_LAST_DUE),
+         DAYS_TERMINATION = ifelse(DAYS_TERMINATION == 365243, NA, DAYS_TERMINATION),
+         APP_CREDIT_PERC = AMT_APPLICATION / AMT_CREDIT) %&gt;% 
+  group_by(SK_ID_CURR) %&gt;% 
+  summarise_all(fn)</pre><p>By adding those features the score reached <code>0.78038</code>.</p>
+<h2>More greedy feature engeerining</h2>
+<p>I decided to do more greedy feature engineering:</p>
+<ol>
+<li>Finding all squares, cubes, square-root… etc. and any two multiples of the variables</li>
+<li>For skewed variables try some transformation method.</li>
+<li>Calculate the correlation coefficient with target</li>
+<li>Pick top 150 variables or coefficient great than some threshold and added to xgb</li>
+</ol>
+<p>This code will actually do everything I said above and output into the nice dplyr format:</p><pre class="crayon-plain-tag">out &lt;- data.frame(
+  feature = character(),
+  corr=numeric()) 
+
+
+for (i in 1:ncol(df)) {
+  if(i %% 50 == 0) print(i)
+  names_df &lt;- names(df)
+  res &lt;- abs(cor(df[,i]^2, y, use = "complete.obs"))
+  out &lt;- add_row(out, 
+                 feature = paste0(names_df[i], "_sq = ", names_df[i], "^2"), 
+                 corr = res)
+  res &lt;- abs(cor(df[,i]^3, y, use = "complete.obs"))
+  out &lt;- add_row(out, 
+                 feature = paste0(names_df[i], "_cube = ", names_df[i],"^3"), 
+                 corr = res)
+  res &lt;- abs(cor(sqrt(abs(df[,i])), y, use = "complete.obs"))
+  out &lt;- add_row(out, 
+                 feature = paste0(names_df[i], "_sqrt = ", "sqrt(",names_df[i], ")"), corr = res)
+                   res &lt;- abs(cor(df[,i]*df[,j], y, use = "complete.obs"))
+  out &lt;- add_row(out, 
+                 feature = paste0(names_df[i],"x",names_df[j]," = ", names_df[i], "*", names_df[j]), 
+                 corr = res[[1]])
+
+  if(!is.nan(moments::skewness(df[,i], na.rm = T)) &amp; moments::skewness(df[,i], na.rm = T)&gt;0.5) {
+    res &lt;- abs(cor(log(df[,i]/mean(df[,i], na.rm = T)+0.1), y, use = "complete.obs"))
+    out &lt;- add_row(out, 
+                   feature = paste0(names_df[i], "_LOG =", "log(",names_df[i],"/mean(", names_df[i], ", na.rm = T)+0.1)"), 
+                   corr = res)
+  }
+
+}
+
+out %&gt;% arrange(-corr) %&gt;% filter(corr &gt; 0.1) %&gt;% pull(feature) %&gt;% paste(collapse=',')</pre><p>Now my score is up to <code>0.78826</code></p>
+<h2>More Models</h2>
+<p>I am feeling I already exhausted simple XGB model here so I decided to do some other models and blend them.<br />
+By using the features from xgb model, I trained two more models — <strong>LightGBM</strong> and <strong>RandomForest</strong></p>
+<h3>LightGBM</h3>
+<p></p><pre class="crayon-plain-tag">params &lt;- list(learning_rate = 0.02,
+              boosting_type = 'dart',
+              objective = 'binary',
+              max_bin = 300,
+              max_depth = 8,
+              metric = 'auc',
+              nthreads = 10,
+              sub_feature = 0.7,
+              num_leaves = 80,
+              bagging_freq = 1,
+              # min_data = 100,
+              min_hessian =  60,
+              lambda_l1 = 0.04,
+              lambda_l2 = 0.08,
+              early_stopping_round = 200,
+              verbose = 0)</pre><p></p>
+<h3>RandomForest</h3>
+<p></p><pre class="crayon-plain-tag">model_rf &lt;- h2o::h2o.randomForest(x = predictors,
+                                  y = "TARGET", 
+                                  training_frame = tr_h2o, 
+                                  validation_frame = te_h2o,
+                                  # mtries=7,
+                                  ntrees=1000,
+                                  max_depth=15,
+                                  stopping_rounds = 200,
+                                  stopping_metric = "AUC"
+                                  )</pre><p>Those single models didn&#8217;t score as well as my xgb model, but they are not bad. Also one thing I noticed that the implementation of XGB is H2O must be different than the original XGB package by Tianqi because even I used the same parameters and data in <code>h2o.xgb</code>, I got way worse fitted model and scores for unknown reasons.</p>
+<h3>Model Blending</h3>
+<p>I tried different model blending methods for those 3 simple models:</p>
+<p>1.Random weight<br />
+2.Rank averaging</p>
+<p>One thing to keep in mind here is that <strong>ranking averages do well on ranking and threshold-based metrics (like AUC) and search-engine quality metrics (like average precision at k)</strong> but not other metrics like RMSE. So be careful.</p>
+<p>sample code:</p><pre class="crayon-plain-tag">pred_v5 &lt;- read_csv("input/sample_submission.csv.zip") %&gt;%
+  mutate(SK_ID_CURR = as.integer(SK_ID_CURR),
+         TARGET = predict(m_xgb, dtest))
+pred_v5 %&lt;&gt;% mutate(rank =  dense_rank(desc(TARGET)))
+blend %&lt;&gt;% mutate(rank =  dense_rank(desc(TARGET)))
+sub_xgb_v4_0_78798 %&lt;&gt;% mutate(rank =  dense_rank(desc(TARGET)))
+rf_v1 %&lt;&gt;% mutate(rank =  dense_rank(desc(TARGET)))
+
+rank_avg &lt;- pred_v5 %&gt;% 
+  mutate(avg_ranks =(rank+2*blend$rank+0.5*sub_xgb_v4_0_78798$rank +0.5* rf_v1$rank)/4,
+         norm_rank = (avg_ranks - min(avg_ranks))/(max(avg_ranks)- min(avg_ranks))
+         )</pre><p>This blending gave me <code>0.79148</code> on public leaderboard.</p>
+<h2>Thing I will try if given more time</h2>
+<p>I didn&#8217;t spend a lot of time on it so my last effort scored <code>0.79764</code> on private final leaderboard and gave me 2326/7198 final ranking. I know I definitely would not get a higher ranking by this simple method. There are many things I wanted to try on this problem such as understand more about the data to do more specific feature engineering, separate the data into pieces and fit different model differently, do more sophisticated model stacking…etc. Maybe I will try on my next competition!</p>
+<p><img src="https://i.kym-cdn.com/photos/images/newsfeed/000/256/519/ccb.gif" alt="" /></p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/home-credit-default-risk-kaggle-competition-summary-2/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+							</item>
+	</channel>
+</rss>

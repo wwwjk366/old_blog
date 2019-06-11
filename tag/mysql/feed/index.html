@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>MySQL &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/tag/mysql/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>MySQL &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>How To Setup MySQL Server and Connect using Rstudio Server</title>
+		<link>https://wwwjk366.github.io/how-to-connect-your-rstudio-server-to-different-databases-using-odbc-in-linux/</link>
+				<comments>https://wwwjk366.github.io/how-to-connect-your-rstudio-server-to-different-databases-using-odbc-in-linux/#respond</comments>
+				<pubDate>Thu, 25 Feb 2016 19:46:09 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[Environment Setup]]></category>
+		<category><![CDATA[Freetds]]></category>
+		<category><![CDATA[Linux]]></category>
+		<category><![CDATA[MySQL]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[Rstudio Server]]></category>
+		<category><![CDATA[Ubuntu]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=56</guid>
+				<description><![CDATA[In my last post I discussed how to install Ubuntu Server and Rstudio Server on it. Today let&#8217;s try to setup a MySQL server and use R to connect, then we have a full data analysis environment of R + SQL database. Install MySQL Server First, let&#8217;s install a MySQL Server on our Ubuntu Server. Open op...]]></description>
+								<content:encoded><![CDATA[<p>In my last post I discussed <a href="https://wwwjk366.github.io/17/"><span style="color: #0000ff;">how to install Ubuntu Server and Rstudio Server on it</span>. </a>Today let&#8217;s try to setup a MySQL server and use R to connect, then we have a full data analysis environment of R + SQL database.</p>
+<h3>Install MySQL Server</h3>
+<p>First, let&#8217;s install a MySQL Server on our Ubuntu Server. Open op terminal and run:</p><pre class="crayon-plain-tag">sudo apt-get install mysql-client mysql-server</pre><p></p>
+<p class="">This command will prompt your put the root user password for MySQL Server. Make sure you remember it.</p>
+<p class="">After install MySQL Server on your system and you can manage it by installing MySQL workbench in Ubuntu Software Center ( I prefer GUI environment, please don&#8217;t judge me) or use following command:</p>
+<p></p><pre class="crayon-plain-tag">mysql -u root -p</pre><p></p>
+<p class="">if you connect successfully which means you&#8217;ve already got a MySQL server up and running. Now lets create a test database and new user</p>
+<p></p><pre class="crayon-plain-tag">create database testdb;
+create user 'user1'@'localhost' identified by 'password';
+grant all on testdb.* to 'user1';</pre><p></p>
+<p class="">Run above then exit from mysql, now we can re-login with</p>
+<p></p><pre class="crayon-plain-tag">mysql -u user1 -p</pre><p></p>
+<p class="">then create a test table</p>
+<p></p><pre class="crayon-plain-tag">use testdb;
+create table names (main_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, first_name TEXT, last_name TEXT);</pre><p></p>
+<h3>Using R package &#8220;RMySQL&#8221; to connect MySQL Server</h3>
+<p>Now let&#8217;s see if we can use R to pull data from our MySQL Server.</p>
+<p>Log in your R server and install package RMySQL package, you might get the following error message</p>
+<p><img class="size-full wp-image-62 aligncenter" src="https://wwwjk366.github.io/wp-content/uploads/2016/02/5.png" alt="5" width="809" height="255" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/02/5.png 809w, https://wwwjk366.github.io/wp-content/uploads/2016/02/5-300x95.png 300w, https://wwwjk366.github.io/wp-content/uploads/2016/02/5-768x242.png 768w" sizes="(max-width: 809px) 100vw, 809px" /></p>
+<p class="">It&#8217;s because we are missing a package in Linux, let&#8217;s follow the prompt and run following code in Terminal:</p>
+<p></p><pre class="crayon-plain-tag">sudo apt-get update
+sudo apt-get install libmysqlclient-dev</pre><p>Then go back to R and install package &#8220;RMySQL&#8221;</p>
+<p>Now try to connect in R use:</p><pre class="crayon-plain-tag">&gt;library(RMySQL)
+&gt;mydb = dbConnect(MySQL(), user='user1', password='password', dbname='testdb', host='localhost')
+&gt; dbListTables(mydb)
+[1] "names" "new_table"</pre><p>we saw the tables in the database, means the connection is successful! (In the above example, we put the host=localhost because our R server and MySQL server are on the same machine. If you are using other machine within the same network, you have to put the Linux host name in the quotation.) We can use following code to pull data and store into dataframe call rs:</p><pre class="crayon-plain-tag">&gt;rs = dbSendQuery(mydb, " SELECT * FROM testdb.names")
+&gt;data = fetch(rs, n=-1)</pre><p>Now starting analysis your data using your own database !!</p>
+<p>&nbsp;</p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/how-to-connect-your-rstudio-server-to-different-databases-using-odbc-in-linux/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+							</item>
+	</channel>
+</rss>

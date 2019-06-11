@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Ubuntu &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/tag/ubuntu/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>Ubuntu &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>How to Install ODBC Driver for Ubuntu and Use RODBC Package in R</title>
+		<link>https://wwwjk366.github.io/how-to-install-odbc-driver-for-ubuntu-and-use-rodbc-package-in-r/</link>
+				<comments>https://wwwjk366.github.io/how-to-install-odbc-driver-for-ubuntu-and-use-rodbc-package-in-r/#comments</comments>
+				<pubDate>Tue, 01 Mar 2016 16:15:33 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[Environment Setup]]></category>
+		<category><![CDATA[Freetds]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[RODBC]]></category>
+		<category><![CDATA[Ubuntu]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=75</guid>
+				<description><![CDATA[In my last post I discussed how to setup a MySQL Server and use R to connect. In many other cases, we have to connect our R to data source from other places like Microsoft SQL Server, etc. Setting up ODBC in windows system is easy because of GUI interface, but it&#8217;s gonna be a...]]></description>
+								<content:encoded><![CDATA[<p>In my last post I discussed <span style="color: #0000ff;"><em><a style="color: #0000ff;" href="https://wwwjk366.github.io/how-to-connect-your-rstudio-server-to-different-databases-using-odbc-in-linux/" target="_blank">how to setup a MySQL Server and use R to connect</a></em></span>. In many other cases, we have to connect our R to data source from other places like Microsoft SQL Server, etc. Setting up ODBC in windows system is easy because of GUI interface, but it&#8217;s gonna be a little tricky for Linux. In this post I will go through the procedure of installing and configuring FreeTDS ODBC driver on Ubuntu 15.10 Server.</p>
+<h3>Install FreeTDS ODBC driver</h3>
+<p>First thing we need to do is install ODBC driver for our server,  run</p><pre class="crayon-plain-tag">sudo apt-get install unixodbc unixodbc-dev freetds-dev tdsodbc</pre><p>This will install freetds ODBC driver, then we have to configure it by editing <em>/etc/odbc.ini</em> and <em>/usr/share/freetds/freetds.conf  </em>files</p>
+<h4>Setup &#8216;/etc/odbc.ini&#8217;</h4>
+<p>Run following code in terminal, this will open up geditor (or you can use other text editor like vim)</p><pre class="crayon-plain-tag">sudo gedit /etc/odbc.ini</pre><p>If the odbc.ini file doesn&#8217;t have any contect, copy the following into it:</p>
+<p><em>[myDB]</em><br />
+<em>Driver=/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so</em><br />
+<em>Trace=No</em><br />
+<em>Server=xxxxxx.com</em><br />
+<em>Port=8925</em><br />
+<em>TDS_Version=8.0</em><br />
+<em>Database=testdb</em></p>
+<p>Put the name you want to call your data source in the bracket and Server address, port, database name, just like what you did in windows ODBC setup. If you have more than one data source to setup, copy the entire paragraph and paste it underneath for the new one. I have four different data source and my odbc.ini file looks like this:</p>
+<p><img class="alignnone size-full wp-image-90" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/6.png" alt="6" width="484" height="611" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/03/6.png 484w, https://wwwjk366.github.io/wp-content/uploads/2016/03/6-238x300.png 238w" sizes="(max-width: 484px) 100vw, 484px" /></p>
+<h4>Setup &#8216;/usr/share/freetds/freetds.conf&#8217;</h4>
+<p>Run following code in terminal</p><pre class="crayon-plain-tag">sudo gedit /usr/share/freetds/freetds.conf</pre><p>change the paragraph at the end with your server host name and port number, use the same name in the bracket and keep everything consistent with your odbc.ini file. My freetds.conf looks like this:</p>
+<p><img class="alignnone size-full wp-image-92" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/7.png" alt="7" width="321" height="230" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/03/7.png 321w, https://wwwjk366.github.io/wp-content/uploads/2016/03/7-300x215.png 300w" sizes="(max-width: 321px) 100vw, 321px" /></p>
+<h3>Test Connection</h3>
+<p>We can use isql command to test the connection. Type in following code in terminal</p>
+<p>isql -v &#8220;data source name&#8221; username password</p>
+<p>If I want to connect to data source called &#8220;MSSQLdb&#8221; using username &#8220;myan&#8221; and password &#8220;1234&#8221;, the command should be:</p><pre class="crayon-plain-tag">isql -v "MSSQLdb" myan 1234</pre><p>If you see the following prompt which means this ODBC is successfully setup</p>
+<p><img class="alignnone size-full wp-image-93" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/8.png" alt="8" width="701" height="198" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/03/8.png 701w, https://wwwjk366.github.io/wp-content/uploads/2016/03/8-300x85.png 300w" sizes="(max-width: 701px) 100vw, 701px" /></p>
+<h3>Run SQL query in R using RODBC</h3>
+<p>Now open up R and install package &#8220;RODBC&#8221;, we can use the following  code to pull and store data into dataframe in R</p><pre class="crayon-plain-tag">library(RODBC)
+odbc.key = odbcConnect("MSSQLdb", uid="myan", pwd="1234")
+rawdata = sqlQuery( channel= odbc.key, query = "SELECT * FROM table1")</pre><p>&nbsp;</p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/how-to-install-odbc-driver-for-ubuntu-and-use-rodbc-package-in-r/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+							</item>
+		<item>
+		<title>How To Setup MySQL Server and Connect using Rstudio Server</title>
+		<link>https://wwwjk366.github.io/how-to-connect-your-rstudio-server-to-different-databases-using-odbc-in-linux/</link>
+				<comments>https://wwwjk366.github.io/how-to-connect-your-rstudio-server-to-different-databases-using-odbc-in-linux/#respond</comments>
+				<pubDate>Thu, 25 Feb 2016 19:46:09 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[Environment Setup]]></category>
+		<category><![CDATA[Freetds]]></category>
+		<category><![CDATA[Linux]]></category>
+		<category><![CDATA[MySQL]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[Rstudio Server]]></category>
+		<category><![CDATA[Ubuntu]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=56</guid>
+				<description><![CDATA[In my last post I discussed how to install Ubuntu Server and Rstudio Server on it. Today let&#8217;s try to setup a MySQL server and use R to connect, then we have a full data analysis environment of R + SQL database. Install MySQL Server First, let&#8217;s install a MySQL Server on our Ubuntu Server. Open op...]]></description>
+								<content:encoded><![CDATA[<p>In my last post I discussed <a href="https://wwwjk366.github.io/17/"><span style="color: #0000ff;">how to install Ubuntu Server and Rstudio Server on it</span>. </a>Today let&#8217;s try to setup a MySQL server and use R to connect, then we have a full data analysis environment of R + SQL database.</p>
+<h3>Install MySQL Server</h3>
+<p>First, let&#8217;s install a MySQL Server on our Ubuntu Server. Open op terminal and run:</p><pre class="crayon-plain-tag">sudo apt-get install mysql-client mysql-server</pre><p></p>
+<p class="">This command will prompt your put the root user password for MySQL Server. Make sure you remember it.</p>
+<p class="">After install MySQL Server on your system and you can manage it by installing MySQL workbench in Ubuntu Software Center ( I prefer GUI environment, please don&#8217;t judge me) or use following command:</p>
+<p></p><pre class="crayon-plain-tag">mysql -u root -p</pre><p></p>
+<p class="">if you connect successfully which means you&#8217;ve already got a MySQL server up and running. Now lets create a test database and new user</p>
+<p></p><pre class="crayon-plain-tag">create database testdb;
+create user 'user1'@'localhost' identified by 'password';
+grant all on testdb.* to 'user1';</pre><p></p>
+<p class="">Run above then exit from mysql, now we can re-login with</p>
+<p></p><pre class="crayon-plain-tag">mysql -u user1 -p</pre><p></p>
+<p class="">then create a test table</p>
+<p></p><pre class="crayon-plain-tag">use testdb;
+create table names (main_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, first_name TEXT, last_name TEXT);</pre><p></p>
+<h3>Using R package &#8220;RMySQL&#8221; to connect MySQL Server</h3>
+<p>Now let&#8217;s see if we can use R to pull data from our MySQL Server.</p>
+<p>Log in your R server and install package RMySQL package, you might get the following error message</p>
+<p><img class="size-full wp-image-62 aligncenter" src="https://wwwjk366.github.io/wp-content/uploads/2016/02/5.png" alt="5" width="809" height="255" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/02/5.png 809w, https://wwwjk366.github.io/wp-content/uploads/2016/02/5-300x95.png 300w, https://wwwjk366.github.io/wp-content/uploads/2016/02/5-768x242.png 768w" sizes="(max-width: 809px) 100vw, 809px" /></p>
+<p class="">It&#8217;s because we are missing a package in Linux, let&#8217;s follow the prompt and run following code in Terminal:</p>
+<p></p><pre class="crayon-plain-tag">sudo apt-get update
+sudo apt-get install libmysqlclient-dev</pre><p>Then go back to R and install package &#8220;RMySQL&#8221;</p>
+<p>Now try to connect in R use:</p><pre class="crayon-plain-tag">&gt;library(RMySQL)
+&gt;mydb = dbConnect(MySQL(), user='user1', password='password', dbname='testdb', host='localhost')
+&gt; dbListTables(mydb)
+[1] "names" "new_table"</pre><p>we saw the tables in the database, means the connection is successful! (In the above example, we put the host=localhost because our R server and MySQL server are on the same machine. If you are using other machine within the same network, you have to put the Linux host name in the quotation.) We can use following code to pull data and store into dataframe call rs:</p><pre class="crayon-plain-tag">&gt;rs = dbSendQuery(mydb, " SELECT * FROM testdb.names")
+&gt;data = fetch(rs, n=-1)</pre><p>Now starting analysis your data using your own database !!</p>
+<p>&nbsp;</p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/how-to-connect-your-rstudio-server-to-different-databases-using-odbc-in-linux/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+							</item>
+	</channel>
+</rss>

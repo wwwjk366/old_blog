@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Uncategorized &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/category/uncategorized/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>Uncategorized &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Output Nice Latex Table as PNG in R</title>
+		<link>https://wwwjk366.github.io/output-nice-latex-table-as-png-in-r/</link>
+				<comments>https://wwwjk366.github.io/output-nice-latex-table-as-png-in-r/#respond</comments>
+				<pubDate>Thu, 05 Jan 2017 15:41:44 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=205</guid>
+				<description><![CDATA[Question How to save a dataframe as a nice looking pic file? This question came to me when I was trying to build a slack integration with R. The limitaion of Slack message formatting is that it does not support table format. So in order to upload a nice looking table (ASCII table are unbearable...]]></description>
+								<content:encoded><![CDATA[<h2>Question</h2>
+<p>How to save a dataframe as a nice looking pic file? This question came to me when I was trying to build a slack integration with R. The limitaion of Slack message formatting is that it does not support table format. So in order to upload a nice looking table (ASCII table are unbearable to look at), I was searching for a solution. After gathering the infomation from Github and Stackoverflow, I found a neat solution to this problem:</p>
+<h2>Solution</h2>
+<p>Check out the following R function:</p><pre class="crayon-plain-tag">table.png &lt;- function(obj, name) { 
+  first &lt;- name
+  name &lt;- paste(name,".tex",sep="")
+  sink(file=name)
+  cat('
+\\documentclass{report}
+\\usepackage[paperwidth=5.5in,paperheight=7in,noheadfoot,margin=0in]{geometry}
+\\begin{document}\\pagestyle{empty}
+')
+  print(xtable::xtable(obj))
+  cat('
+\\end{document}
+')
+  sink()
+  tools::texi2dvi(file=name)
+  cmd &lt;- paste("dvipng -T tight", shQuote(paste(first,".dvi",sep="")))
+  invisible(system(cmd))
+  cleaner &lt;- c(".tex",".aux",".log",".dvi")
+  invisible(file.remove(paste(first,cleaner,sep="")))
+}</pre><p>&nbsp;</p>
+<p>Basically what this function does is using <strong>xtable</strong> to print the dataframe in LaTex format, then use <strong>texi2dvi</strong> to compile it and use <strong>dvipng</strong> to convert it into png afterwards.</p>
+<p>So make sure you have those app set-up before running this code. I&#8217;m using Ubuntu so this is what I did:</p><pre class="crayon-plain-tag">sudo apt-get install dvipng texlive-latex-base texinfo</pre><p>After everything has been setup, we can call this function</p><pre class="crayon-plain-tag">data("mtcars")
+table.png(head(mtcars),"test")</pre><p><img src="data:image/png;base64,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" alt="" /></p>
+<p>Now I can send this nice looking table to slack for no problem!</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><iframe width="480" height="402" src="//giphy.com/embed/JltOMwYmi0VrO" frameborder="0" class="giphy-embed" allowfullscreen="allowfullscreen"></iframe></p>
+<p><a href="http://giphy.com/gifs/JltOMwYmi0VrO">via GIPHY</a></p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/output-nice-latex-table-as-png-in-r/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+							</item>
+	</channel>
+</rss>

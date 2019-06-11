@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Data &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/tag/data/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>Data &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Two Simple Yet Powerful Packages that Every Data Scientist using R Should Know</title>
+		<link>https://wwwjk366.github.io/two-simple-yet-powerful-packages-r/</link>
+				<comments>https://wwwjk366.github.io/two-simple-yet-powerful-packages-r/#respond</comments>
+				<pubDate>Sun, 03 Mar 2019 19:41:29 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[R stuff]]></category>
+		<category><![CDATA[Data]]></category>
+		<category><![CDATA[R]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=265</guid>
+				<description><![CDATA[The Problems Messy Column Names If you are a fairly experienced data scientist using R as your main analytic tool, you must have encountered problems like those: I imported a data file from some other data source and the naming conventions on those variables a messed up. e.g. Spaces in column names that makes referencing...]]></description>
+								<content:encoded><![CDATA[<h2>The Problems</h2>
+<h3>Messy Column Names</h3>
+<p>If you are a fairly experienced data scientist using R as your main analytic tool, you must have encountered problems like those:</p>
+<ul>
+<li>I imported a data file from some other data source and the naming conventions on those variables a messed up. e.g. Spaces in column names that makes referencing then in R harder ( have to use the tick sign “”).</li>
+</ul>
+<p>In my example below you can see that I have mixed type of column names</p><pre class="crayon-plain-tag">df &lt;- readxl::read_xlsx("test.xlsx")
+names(df)</pre><p></p><pre class="crayon-plain-tag">## [1] "full name"          "AGE"                "Salary Expectation"
+## [4] "date"               "anotherDate"        "yet another date"</pre><p>In order to reference the first column <code>full name</code>, I have to wrap the name with “” in R:</p><pre class="crayon-plain-tag">df$`full name`</pre><p></p><pre class="crayon-plain-tag">## [1] "michael jordan" "steve jobs"     "el paco"</pre><p>This is creating some nuances because we shouldn&#8217;t really have spaces in variable names.</p>
+<p>I know it is fine that we can always do something like</p><pre class="crayon-plain-tag">names(df) &lt;- c("full_name", "age", ....)</pre><p>But what if we have lots of variables? Doing this manually seems impossible.</p>
+<h3><code>janitor</code> package</h3>
+<p><code>janitor</code> has simple functions for examining and cleaning dirty data. It was built with beginning and intermediate R users in mind and is optimized for user-friendliness. Advanced R users can already do everything covered here, but with janitor they can do it faster and save their thinking for the fun stuff.</p>
+<p>We can use <code>clean_names</code> function from <code>janitor</code> package. e.g.</p><pre class="crayon-plain-tag">df %&gt;% janitor::clean_names(case = "snake")</pre><p></p><pre class="crayon-plain-tag">## # A tibble: 3 x 6
+##   full_name   age salary_expectat~ date                another_date
+##   &lt;chr&gt;     &lt;dbl&gt;            &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;       
+## 1 michael ~    55            12000 2016-01-31 12:13:14 2017-01-01  
+## 2 steve jo~    45            32002 2016-02-01 12:13:14 2017-12-22  
+## 3 el paco      35            31313 2016-02-02 12:13:14 2017-01-03  
+## # ... with 1 more variable: yet_another_date &lt;chr&gt;</pre><p>you can change up the output format as well:</p><pre class="crayon-plain-tag">clean_df &lt;- df %&gt;% janitor::clean_names(case = "all_caps")
+
+clean_df</pre><p></p><pre class="crayon-plain-tag">## # A tibble: 3 x 6
+##   FULL_NAME   AGE SALARY_EXPECTAT~ DATE                ANOTHER_DATE
+##   &lt;chr&gt;     &lt;dbl&gt;            &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;       
+## 1 michael ~    55            12000 2016-01-31 12:13:14 2017-01-01  
+## 2 steve jo~    45            32002 2016-02-01 12:13:14 2017-12-22  
+## 3 el paco      35            31313 2016-02-02 12:13:14 2017-01-03  
+## # ... with 1 more variable: YET_ANOTHER_DATE &lt;chr&gt;</pre><p>This is just one simple function from <code>janitor</code> package, but this will save us lots of time when tidying up the data.</p>
+<h3>Date and time conversion</h3>
+<p>Date and time objects are always a tricky thing in computer science. There are tons of different way to record time — <code>YYYY-MM-DD-HH-MM-SS</code>, <code>MM-DD-YY</code>, <code>DD/MM/YYYY HHMMSS</code>…and so on. Some of the data you are dealing with are probably already in a good datetime format or POSIXct format in R. But most of the times the aren&#8217;t. I have a quick example in the same datafrom <code>df</code></p><pre class="crayon-plain-tag">str(df)</pre><p></p><pre class="crayon-plain-tag">## Classes 'tbl_df', 'tbl' and 'data.frame':    3 obs. of  6 variables:
+##  $ full name         : chr  "michael jordan" "steve jobs" "el paco"
+##  $ AGE               : num  55 45 35
+##  $ Salary Expectation: num  12000 32002 31313
+##  $ date              : POSIXct, format: "2016-01-31 12:13:14" "2016-02-01 12:13:14" ...
+##  $ anotherDate       : chr  "2017-01-01" "2017-12-22" "2017-01-03"
+##  $ yet another date  : chr  "2016-Sep-01 10:11:12" "2016-Sep-02 10:11:12" "2016-Dec-01 10:11:12"</pre><p>As you can see the last 3 columns:</p>
+<ul>
+<li><code>date</code> : a nice POSIXct</li>
+<li><code>anotherDate</code>: a character with <code>YYYY-MM-DD</code> format</li>
+<li><code>yet another date</code>: a character with month as acronyms, ISO style</li>
+</ul>
+<p>How do we unify and clean those fields?</p>
+<h3><code>anytime</code> Package</h3>
+<p><code>anytime</code> aims to be that general purpose converter returning a proper POSIXct (or Date)<br />
+object no matter the input, relying on Boost date_time for the (efficient, performant) conversion. <a href="http://dirk.eddelbuettel.com/code/anytime.html">link</a></p>
+<p>One specific function I used a lot from this package is <code>anytime()</code></p><pre class="crayon-plain-tag">library(anytime)
+
+anytime(c("2016-01-01 10:11:12", "2016-01-01 10:11:12.345678"))</pre><p></p><pre class="crayon-plain-tag">## [1] "2016-01-01 10:11:12 EST" "2016-01-01 10:11:12 EST"</pre><p></p><pre class="crayon-plain-tag">clean_df %&gt;% 
+  mutate(ANOTHER_DATE = anytime(ANOTHER_DATE),
+         YET_ANOTHER_DATE = anytime(YET_ANOTHER_DATE)) %&gt;% 
+  str()</pre><p></p><pre class="crayon-plain-tag">## Classes 'tbl_df', 'tbl' and 'data.frame':    3 obs. of  6 variables:
+##  $ FULL_NAME         : chr  "michael jordan" "steve jobs" "el paco"
+##  $ AGE               : num  55 45 35
+##  $ SALARY_EXPECTATION: num  12000 32002 31313
+##  $ DATE              : POSIXct, format: "2016-01-31 12:13:14" "2016-02-01 12:13:14" ...
+##  $ ANOTHER_DATE      : POSIXct, format: "2017-01-01" "2017-12-22" ...
+##  $ YET_ANOTHER_DATE  : POSIXct, format: "2016-09-01 10:11:12" "2016-09-02 10:11:12" ...</pre><p>Look at those beautiful time objects!</p>
+<p><img src="https://media.giphy.com/media/9jEaPxN9eZWmI/giphy.gif" alt="" /></p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/two-simple-yet-powerful-packages-r/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+							</item>
+	</channel>
+</rss>

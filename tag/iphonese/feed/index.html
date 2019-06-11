@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>iphoneSE &#8211; Think. Data. Science.</title>
+	<atom:link href="https://wwwjk366.github.io/tag/iphonese/feed/" rel="self" type="application/rss+xml" />
+	<link>http://wwwjk366.github.io/</link>
+	<description>You can have data without information, but you cannot have information without data.</description>
+	<lastBuildDate>
+	Tue, 05 Mar 2019 04:34:07 +0000	</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.1.1</generator>
+
+<image>
+	<url>https://wwwjk366.github.io/wp-content/uploads/2016/02/HiAppHere_com_com.memorado.brain_.games_-150x150.png</url>
+	<title>iphoneSE &#8211; Think. Data. Science.</title>
+	<link>http://wwwjk366.github.io/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>How People Think of iPhone SE? &#8212; A Twitter Sentiment Analysis Using R</title>
+		<link>https://wwwjk366.github.io/how-people-think-of-iphone-se-a-twitter-sentiment-analysis-using-r/</link>
+				<comments>https://wwwjk366.github.io/how-people-think-of-iphone-se-a-twitter-sentiment-analysis-using-r/#comments</comments>
+				<pubDate>Tue, 22 Mar 2016 20:57:26 +0000</pubDate>
+		<dc:creator><![CDATA[Michael Yan]]></dc:creator>
+				<category><![CDATA[Text Mining]]></category>
+		<category><![CDATA[iphoneSE]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[sentiment analysis]]></category>
+		<category><![CDATA[text mining]]></category>
+		<category><![CDATA[TwitteR]]></category>
+
+		<guid isPermaLink="false">https://wwwjk366.github.io/?p=104</guid>
+				<description><![CDATA[One of the topics I saw people discussing most yesterday was Apple&#8217;s new keynote events. I personally followed the event yesterday and I&#8217;m feeling like this now A smaller iPhone, smaller iPad, and the same watch&#8230;. Anyway, Let&#8217;s turn to the interesting part &#8212; find out how people on the internet think of this event...]]></description>
+								<content:encoded><![CDATA[<p>One of the topics I saw people discussing most yesterday was Apple&#8217;s new keynote events. I personally followed the event yesterday and I&#8217;m feeling like this now</p>
+<p><img class="size-full wp-image-106 aligncenter" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/giphy.gif" alt="giphy" width="500" height="264" /></p>
+<p>A smaller iPhone, smaller iPad, and the same watch&#8230;.</p>
+<p><img class="wp-image-107 aligncenter" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/giphy-1.gif" alt="giphy (1)" width="317" height="217" /></p>
+<p>Anyway, Let&#8217;s turn to the interesting part &#8212; find out how people on the internet think of this event and the new iPhone using R!</p>
+<h3>Setting up Twitter API Account</h3>
+<p>In order to scrap tweets from twitter, we need to setup an twitter API account. Go to apps.twitter.com and login with your twitter account.</p>
+<p><img class="alignnone wp-image-108" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/Capture.png" alt="Capture" width="648" height="274" /></p>
+<p>Click &#8220;Create New App&#8221; on the top right corner, fill in the information and accept the agreement</p>
+<p><img class="alignnone wp-image-109" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/11.png" alt="11" width="646" height="413" /></p>
+<p>You will see the welcome page of your app, click &#8220;manage keys and access tokens&#8221; in the middle part of the page and you will be direct to token management page</p>
+<p><img class="alignnone size-full wp-image-111" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/12-1.png" alt="12" width="1005" height="916" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/03/12-1.png 1005w, https://wwwjk366.github.io/wp-content/uploads/2016/03/12-1-300x273.png 300w, https://wwwjk366.github.io/wp-content/uploads/2016/03/12-1-768x700.png 768w" sizes="(max-width: 1005px) 100vw, 1005px" /></p>
+<p>Click the button under &#8220;Token Actions&#8221; to get your access tokens.</p>
+<p>Now your API tokens are all set. However twitter has certain request limit on free APIs, you can find out the limit of free API <span style="color: #0000ff;"><a style="color: #0000ff;" href="https://dev.twitter.com/rest/public/rate-limiting" target="_blank">here</a></span></p>
+<h3>Prepare Environment in R</h3>
+<p>Here is the list of all the packages needed in this analysis</p><pre class="crayon-plain-tag">library(httr) 
+library(devtools)
+library(twitteR)
+library(tm)
+library(wordcloud)
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+library(RCurl)
+library(stringr)
+library(SnowballC)
+library(sentiment)</pre><p></p>
+<p class="">package &#8220;sentiment&#8221; is no-longer available on CRAN so we have to install it using</p>
+<p></p><pre class="crayon-plain-tag">if (!require("pacman")) install.packages("pacman")
+pacman::p_load(devtools, installr)
+install.Rtools()
+install_url("http://cran.r-project.org/src/contrib/Archive/Rstem/Rstem_0.4-1.tar.gz")
+install_url("http://cran.r-project.org/src/contrib/Archive/sentiment/sentiment_0.2.tar.gz")</pre><p></p>
+<p class="">Once we get all the packages, load them up and using the following code to test connect with Twitter:</p>
+<p></p><pre class="crayon-plain-tag">api_key = "rYGhfKEHrfRxxxxxxxx"
+api_secret = "iKg9rQzuyeZCfxxxxxxxxxxxxxxxx"
+access_token = "4330312312-7ajlPfxxxxxxxxxxxxxxxxxxxxxxxxxx"
+access_token_secret = "XB6zttxxxxxxxxxxxxxxxx"
+options(httr_oauth_cache = T)  #skip manual selection
+setup_twitter_oauth(api_key,api_secret,access_token,access_token_secret)</pre><p></p>
+<p class="">Replace the character in those fields using your own tokens and if your code didn&#8217;t return any error and get the following prompt, which means you are now successfully connected to Twitter.</p>
+<p></p><pre class="crayon-plain-tag">[1] "Using direct authentication"</pre><p></p>
+<h3> Data Pulling and Pre-processing</h3>
+<p>Pulling data from Twitter is simple using searchTwitter() function from twitteR package. The code below will pull the most recent 2000 English tweets from Twitter by keyword &#8220;iphoneSE&#8221;. searchTwitter() function will return a list and we can use twListTODF() function to convert it to a dataframe.</p><pre class="crayon-plain-tag">tweets &lt;- searchTwitter("iphoneSE", lang="en",n= 2000)
+tweets.df &lt;- twListToDF(tweets)</pre><p>Lets check what&#8217;s the tweets look like:</p><pre class="crayon-plain-tag">&gt;head(tweets.df$text)
+[1] "Iphone SE $399. Follow @canada.deals to find out when it goes on sale. \n#iphonese #iphone #apple #newiphone #iphone… https://t.co/B9J7EGa3Jt"                      
+[2] "RT @samirabelhaj52: Follow\xed\xa0\xbd\xed\xb9\x8f\n&lt;img draggable="false" data-mce-resize="false" data-mce-placeholder="1" data-wp-emoji="1" class="emoji" alt="<img src="https://s.w.org/images/core/emoji/11.2.0/72x72/27a1.png" alt="➡" class="wp-smiley" style="height: 1em; max-height: 1em;" />" src="https://s.w.org/images/core/emoji/72x72/27a1.png"&gt;@Ihab_Amir\n&lt;img draggable="false" data-mce-resize="false" data-mce-placeholder="1" data-wp-emoji="1" class="emoji" alt="<img src="https://s.w.org/images/core/emoji/11.2.0/72x72/27a1.png" alt="➡" class="wp-smiley" style="height: 1em; max-height: 1em;" />" src="https://s.w.org/images/core/emoji/72x72/27a1.png"&gt; https://t.co/m5MOPQG0e3 … … … … … … … …\n#IhabAmir\n#iPhoneSE \n#Iraq \n#ISIS \n#Iran https://t.co/1hK…"
+[3] "RT @techeblog: #iPhoneSE officially unveiled at #AppleEvent, is most powerful 4\" #smartphone yet. https://t.co/NX3aD2RvEJ #gadgets https://…"                      
+[4] "RT @techeblog: #iPhoneSE officially unveiled at #AppleEvent, is most powerful 4\" #smartphone yet. https://t.co/NX3aD2RvEJ #gadgets https://…"                      
+[5] "RT @JeronimoSaldana: I don't need a new #iPhoneSE, I need a new political 
+system that truly empowers our gente, inspires discourse, and pro…"                       
+[6] "#Apple targets #India with new #iPhoneSE More here on this news: https://t.co/3tHekjckGs #smartphone #iOS https://t.co/OS4zxYVlkO"</pre><p></p>
+<p class="lang:r decode:true GCWXI2KCJKB ">It&#8217;s pretty messy with all the symbols, annotations URLs, we need some data cleaning before we do anything further, here is the function to clean the tweets</p>
+<p></p><pre class="crayon-plain-tag">clean.text = function(some_txt){
+ some_txt = gsub("(RT|via)((?:\\b\\W*@\\w+)+)", "", some_txt) # remove retweet entities
+ some_txt = gsub("@\\w+", "", some_txt) # remove at people
+ some_txt = gsub("[[:punct:]]", "", some_txt) # remove punctuation
+ some_txt = gsub("[[:digit:]]", "", some_txt) # remove numbers
+ some_txt = gsub("[^[:alnum:]]", " ", some_txt) # remove non-alphabetic
+ some_txt = gsub("http\\w+", "", some_txt) # remove html links
+ some_txt = gsub("amp", "", some_txt)
+ # define "tolower error handling" function
+ try.tolower = function(x)
+ {
+ y = NA
+ try_error = tryCatch(tolower(x), error=function(e) e)
+ if (!inherits(try_error, "error"))
+ y = tolower(x)
+ return(y)
+ }
+ 
+ some_txt = sapply(some_txt, try.tolower)
+ some_txt = some_txt[some_txt != ""]
+ names(some_txt) = NULL
+ return(some_txt)
+}</pre><p></p>
+<p class="lang:r decode:true GCWXI2KCJKB ">&#8220;tm&#8221; package using a Corpus format for text mining and some useful functions to remove stop words like &#8220;a&#8221;, &#8220;and&#8221;, &#8220;for&#8221;, etc. When we doing the analysis we also want remove the exact same search word &#8220;iphonese&#8221; be that will be in all the tweets, we can also remove some words we think that will affect our analysis.</p>
+<p></p><pre class="crayon-plain-tag">tweets.list &lt;- sapply(tweets, function(x) x$getText())
+tweets.clean &lt;- clean.text(tweets.list)
+tweets.corpus &lt;- Corpus(VectorSource(tweets.clean))
+tweets.corpus &lt;- tm_map(tweets.corpus, removeWords, stopwords())
+rm.words &lt;- c("iphonese","iphone", "apple")
+tweets.corpus &lt;- tm_map(tweets.corpus, removeWords, rm.words)</pre><p></p>
+<p class="lang:r decode:true GCWXI2KCJKB ">After cleaning, here is what&#8217;s our tweets looks like:</p>
+<p></p><pre class="crayon-plain-tag">&gt;lapply(tweets.corpus[1:10], as.character)
+
+[1] " se  follow deals  find    goes  sale     newiphone  "
+[1] " follow                  ihabamir   iraq  isis  iran "
+[1] "  officially unveiled  appleevent   powerful  smartphone yet  gadgets "</pre><p></p>
+<p class="lang:r decode:true GCWXI2KCJKB ">Only useful words left, good.</p>
+<h3 class="lang:r decode:true GCWXI2KCJKB ">Simple Word Cloud and Analysis</h3>
+<p class="lang:r decode:true GCWXI2KCJKB ">Let&#8217;s do a word could to visually identify which words come up more often. Using wordcloud() function from &#8220;wordcloud()&#8221; package like below</p>
+<p></p><pre class="crayon-plain-tag">wordcloud(tweets.corpus, scale=c(5,0.5), max.words=200, random.order=FALSE, rot.per=0.35, use.r.layout=FALSE, colors=brewer.pal(8, "Dark2"))</pre><p></p>
+<p class="lang:r decode:true GCWXI2KCJKB "><img class="alignnone size-full wp-image-118" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png.png" alt="plot_zoom_png" width="590" height="360" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png.png 590w, https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png-300x183.png 300w" sizes="(max-width: 590px) 100vw, 590px" /></p>
+<p class="lang:r decode:true GCWXI2KCJKB ">It&#8217;s pretty straight-forward, bigger sizes means more frequent. What if we want to look into more details?</p>
+<p class="lang:r decode:true GCWXI2KCJKB ">First we need transform the corpus into Document-Term-Matrix, then we can find out the top 10 frequent word in our data</p>
+<p></p><pre class="crayon-plain-tag">myDTM = DocumentTermMatrix(tweets.corpus, control = list(minWordLength = 1)) freq &lt;- sort(colSums(as.matrix(myDTM)), decreasing=TRUE) head(freq, 10) new appleevent body beauty brain otak tapi like still expensive 435 323 317 296 296 296 296 242 144 134</pre><p>You can also look for words appeared over a certain times</p><pre class="crayon-plain-tag">&gt;findFreqTerms(myDTM, lowfreq=100)
+"appleevent" "beauty" "body" "brain" "expensive" "gadgets" "just" "like" "looks" "new" "officially" "otak" "powerful" "smartphone" "still" "tapi" "unveiled" "yet"</pre><p></p>
+<p class="GCWXI2KCJKB " tabindex="0">Those are the words appeared at leaset 100 times within those 2000 tweets. We noticed a negative word &#8220;expensive&#8221;, we can use findAssocs() function to find word that are correlated with &#8220;expensive&#8221;, let&#8217;s find out which word has over 0.5 correlation with &#8220;expensive&#8221;:</p>
+<p></p><pre class="crayon-plain-tag">&gt;findAssocs(myDTM,'expensive',0.5)
+&gt;$expensive
+still 
+ 0.92</pre><p></p>
+<p class="lang:default decode:true GCWXI2KCJKB ">The answer is &#8220;still&#8221;, so people think iphoneSE &#8220;still expensive&#8221;? Make sense.</p>
+<h3 class="lang:default decode:true GCWXI2KCJKB ">Sentiment Analysis using &#8220;sentiment&#8221; R Package</h3>
+<p>&#8220;sentiment&#8221; package provides us a classify_emotion() function to classify words into 6 different categories &#8212; angry, sadness, joy, surprise, fear, disgust, unknown, it also has classify_polarity() function to classify word into sentiment negative, neutral and positive. Those function support naive bayes classification method. The following code will run those functions on our tweets data and generate a dataframe with emotion and polarity.</p><pre class="crayon-plain-tag">class.emo = classify_emotion(tweets.clean, algorithm="bayes", prior=1.0)
+emotion = class.emo[,7]
+emotion[is.na(emotion)] = "unknown"
+
+class.pol = classify_polarity(tweets.clean, algorithm="bayes")
+polarity = class.pol[,4]
+
+sent.df = data.frame(text=tweets.clean, emotion=emotion, polarity=polarity, stringsAsFactors=FALSE)
+sent.df = within(sent.df, emotion &lt;- factor(emotion, levels=names(sort(table(emotion), decreasing=TRUE))))</pre><p>Let&#8217;s plot them using &#8220;ggplot2&#8221; pacakge</p><pre class="crayon-plain-tag">ggplot(sent.df, aes(x=emotion)) +
+ geom_bar(aes(y=..count.., fill=emotion)) +
+ scale_fill_brewer(palette="Dark2") +
+ labs(x="emotion categories", y="number of tweets")</pre><p></p>
+<p class=""><img class="alignnone wp-image-119" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png-1.png" alt="plot_zoom_png (1)" width="633" height="279" /></p>
+<p></p><pre class="crayon-plain-tag">ggplot(sent.df, aes(x=polarity)) +
+ geom_bar(aes(y=..count.., fill=polarity)) +
+ scale_fill_brewer(palette="RdGy") +
+ labs(x="polarity categories", y="number of tweets")</pre><p><img class="alignnone wp-image-120" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png-2.png" alt="plot_zoom_png (2)" width="621" height="329" /></p>
+<p>It looks like most of the words cannot be assigned to a emotion (like &#8220;appleevent&#8221; &#8220;body&#8221; &#8220;brain&#8221;), which make sense. The good thing is most of them can be assigned to a polarity. Lets run a comparison word cloud on it.</p><pre class="crayon-plain-tag">emos = levels(factor(sent.df$polarity))
+n = length(emos)
+emo.docs = rep("", nemo)
+for (i in 1:n)
+{
+ tmp = tweets.clean[polarity == emos[i]]
+ emo.docs[i] = paste(tmp, collapse=" ")
+}
+
+emo.docs = removeWords(emo.docs, stopwords("english"))
+emo.docs = removeWords(emo.docs, rm.words)
+corpus = Corpus(VectorSource(emo.docs))
+tdm = TermDocumentMatrix(corpus)
+tdm = as.matrix(tdm)
+colnames(tdm) = emos
+
+
+comparison.cloud(tdm, colors = brewer.pal(8, "Dark2"),scale = c(4,.5), random.order = FALSE, title.size = 2)</pre><p><img class="alignnone size-full wp-image-122" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png-3.png" alt="plot_zoom_png (3)" width="765" height="505" srcset="https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png-3.png 765w, https://wwwjk366.github.io/wp-content/uploads/2016/03/plot_zoom_png-3-300x198.png 300w" sizes="(max-width: 765px) 100vw, 765px" /></p>
+<p>Voila! &#8220;still expensive&#8221; is the most mentioned words in negative group, limited positive words including &#8220;beauty&#8221;, &#8220;like&#8221;.</p>
+<p>Seems like people are not so excited about this new iPhone SE, but I&#8217;m sure you are excited about our analysis!</p>
+<p><img class="size-full wp-image-128 aligncenter" src="https://wwwjk366.github.io/wp-content/uploads/2016/03/200-1.gif" alt="200 (1)" width="356" height="200" /></p>
+<div class="saboxplugin-wrap" itemtype="http://schema.org/Person" itemscope itemprop="author"><div class="saboxplugin-gravatar"><img alt='' src='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=100&#038;d=identicon&#038;r=g' srcset='http://0.gravatar.com/avatar/686fe02aba9090b895e967fa6cc296a3?s=200&#038;d=identicon&#038;r=g 2x' class='avatar avatar-100 photo' height='100' width='100' itemprop="image"/></div><div class="saboxplugin-authorname"><a href="https://wwwjk366.github.io/author/wwwjk366/" class="vcard author" rel="author" itemprop="url"><span class="fn" itemprop="name">Michael Yan</span></a></div><div class="saboxplugin-desc"><div itemprop="description"><p>&#8220;In god we trust, all others bring data.&#8221;  &#8212; William Edwards Deming</p>
+</div></div><div class="saboxplugin-web "><a href="http://wwwjk366.github.io/" target="_self" >http://wwwjk366.github.io/</a></div><div class="clearfix"></div></div>]]></content:encoded>
+							<wfw:commentRss>https://wwwjk366.github.io/how-people-think-of-iphone-se-a-twitter-sentiment-analysis-using-r/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+							</item>
+	</channel>
+</rss>
